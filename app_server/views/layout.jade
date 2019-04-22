@@ -18,14 +18,14 @@ html
           #navbar-main.navbar-collapse.collapse
             ul.nav.navbar-nav
               li
-                a(href='/about') About
-    .container            
-      block content
+                a(href='/generic-view') About
+      .container            
+        block content
 
-        script(src='/javascripts/jquery3.4.0.js')
-        script(src='/bootstrap/js/bootstrap.min.js')
+        footer
+          .row
+            .col-xs-12
+              small &copy; Jesse Brite - 2019
 
-      footer
-        .row
-          .col-xs-12
-            small &copy; Jesse Brite - 2019
+    script(src='/javascripts/jquery3.4.0.js')
+    script(src='/bootstrap/js/bootstrap.min.js')

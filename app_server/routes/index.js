@@ -9,6 +9,6 @@ router.get('/location', ctrlLocations.locationInfo);
 router.get('/location/review/new', ctrlLocations.addReview);
 
 /* Others page*/
-router.get('/about', ctrlOthers.about);
+router.get('/generic-view', ctrlOthers.about);
 
 module.exports = router;
