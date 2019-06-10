@@ -2,24 +2,8 @@ var mongoose = require('mongoose');
 var Loc = mongoose.model('Location');
 
 module.exports.reviewsCreate = function(req, res) {
-	sendJsonResponse(rs, 200, {'message' : 'success'});
+	sendJsonResponse(res, 200, {'message' : 'success'});
 };
-
-// Trying to figure out why I can't retrieve reviewid
-// This function will be deleted to make way for the commented one
-// module.exports.reviewsReadOne = function(req, res) {
-// 	Loc.findById(req.params.locationid)
-// 		.select('name reviews')
-// 		.exec(function(err, location) {
-// 			var review;
-// 			review = location.reviews.id(req.params.reviewid);
-// 			if (!review) {
-// 				sendJsonResponse(res, 404, {'message' : 'reviewid not found'});
-// 			} else {
-// 				sendJsonResponse(res, 200, {'messge' : 'success'});
-// 			}
-// 		});
-// }
 
 module.exports.reviewsReadOne = function(req, res) {
 	if (req.params && req.params.locationid && req.params.reviewid) {
