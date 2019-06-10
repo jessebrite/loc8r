@@ -49,30 +49,37 @@ module.exports.locationsListByDistance = function(req, res) {
         locations = buildLocationList(req, res, results);
         sendJsonResponse(res, 200, locations);
         console.log('Results success');
-        console.log(locations);
+        console.table(locations);
       }
     }
 	)			
 }
 
-var buildLocationList = function(req, res, results) {
-	var locations = [];
-	results.forEach(function(doc) {
-		locations.push({
-			distance: doc.dist.calculated,
-			name: doc.name,
-			address: doc.address,
-			rating: doc.rating,
-			facilities: doc.facilities,
-			_id: doc._id
-		})
-	});
-	return locations;
-}
-
-
 module.exports.locationsCreate = function(req, res) {
-	sendJsonResponse(res, 200, {'status' : 'success',});
+	Loc.create({
+		name: req.body.name,
+		address: req.body.address,
+		facilities: req.body.facilities.split(','),
+		coord: [parseFloat(req.body.lng), (req.body.lat)],
+		openingTimes: [{
+			days: req.body.days1,
+			opening: req.body.opening2,
+			closing: req.body.closing2,
+			closed: req.body.closed2
+		}, {
+			days: req.body.days2,
+			opening: req.body.opening2,
+			closing: req.body.closing2,
+			closed: req.body.closed2
+		}],
+	},
+	function(err, location) {
+		if (err) {
+			sendJsonResponse(res, 404, err);
+		} else {
+			sendJsonResponse(res, 201, location);
+		}	
+	});
 };
 
 module.exports.locationsReadOne = function(req, res) {
@@ -107,4 +114,19 @@ module.exports.locationsDeleteOne = function(req, res) {
 var sendJsonResponse = function(res, status, content) {
 	res.status(status);
 	res.json(content);
+}
+
+var buildLocationList = function(req, res, results) {
+	var locations = [];
+	results.forEach(function(doc) {
+		locations.push({
+			distance: doc.dist.calculated,
+			name: doc.name,
+			address: doc.address,
+			rating: doc.rating,
+			facilities: doc.facilities,
+			_id: doc._id
+		})
+	});
+	return locations;
 }
