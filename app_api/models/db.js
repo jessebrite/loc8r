@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-// Connect the app to a database
-// Else, connected to local MongoDB local
-var dbURI = 'mongodb://localhost/loc8r';
+// Connect the app MongoDB local
+const dbURI = 'mongodb://localhost/loc8r';
 
  // Connect to MongoDB atlas if in production mode
 if (process.env.NODE_ENV  === 'production') {
@@ -22,7 +21,7 @@ mongoose.connection.on('disconnected', function () {
 });
 
 // CAPTURE APP TERMINATION/RESTART EVENT
-var gracefulShutdown = function (msg, callback) {
+const gracefulShutdown = function (msg, callback) {
 	mongoose.connection.close(function () {
 		console.log('Mongoose disconnected through ' + msg);
 		callback();
