@@ -3,13 +3,14 @@ var Loc = mongoose.model('Location');
 
 module.exports.reviewsCreate = function(req, res) {
 	var locationid = req.params.locationid;
-	if (locationid) {
+	if (req.params && locationid) {
 		Loc.findById(locationid)
 				.select('reviews')
 				.exec(function(err, location) {
 					if (err) {
 						sendJsonResponse(res, 404, err);
 					} else {
+						// Call the doAddReview function
 						doAddReview(req, res, location);
 					}
 				});
@@ -62,8 +63,47 @@ module.exports.reviewsReadOne = function(req, res) {
 };
 
 module.exports.reviewsUpdateOne = function(req, res) {
-	sendJsonResponse(res, 200, {'status' : 'success'});
+	const locationid = req.params.locationid,
+				reviewid = req.params.reviewid;
+	if (req.params && locationid && reviewid) {
+		Loc.findById(locationid).select('reviews')
+				.exec(function(err, location) {
+					var thisReview;
+					if (!location) {
+						sendJsonResponse(res, 404, {'message': 'No locationid found'});
+					} else if (err) {
+						sendJsonResponse(res, 400, err);
+					}
+					const	reviews = location.reviews;
+					if (reviews && reviews.length > 0) {
+						thisReview = reviews.id(reviewid);
+						if (!thisReview) {
+							sendJsonResponse(res, 404, {'message': 'No reviewid found'});
+						} else if (err) {
+							sendJsonResponse(res, 400, err);
+						} else {
+							thisReview.author = req.body.author;
+							thisReview.rating = req.body.rating;
+							thisReview.reviewText = req.body.reviewText;
+							location.save(function(err, location) {
+								if (err) {
+									sendJsonResponse(res, 404, err);
+								} else {
+									updateAverageRating(location._id);
+									sendJsonResponse(res, 200, thisReview);
+								}
+							});
+						}
+					} else {
+						sendJsonResponse(res, 404, {'message': 'No review to update'});
+					}
+				});
+	} else {
+		sendJsonResponse(res, 404, err);
+		console.log('location and reviewid are both required');
+	}
 };
+
 module.exports.reviewsDeleteOne = function(req, res) {
 	sendJsonResponse(res, 200, {'status' : 'success'});
 };
@@ -88,6 +128,7 @@ var doAddReview = function(req, res, location) {
 			if (err) {
 				sendJsonResponse(res, 404, err);
 			} else {
+				// Call the updateAverageRating function
 				updateAverageRating(location.id);
 				thisReview = location.reviews[location.reviews.length - 1];
 				sendJsonResponse(res, 201, thisReview);
@@ -98,6 +139,7 @@ var doAddReview = function(req, res, location) {
 	}
 }
 
+// Updates the rating
 var updateAverageRating = function(locationid) {
 	Loc.findById(locationid)
 			.select('rating reviews')
@@ -105,18 +147,20 @@ var updateAverageRating = function(locationid) {
 				if (err) {
 					sendJsonResponse(res, 404, err)
 				} else {
+					// Call the doSetAverageRating function
 					doSetAverageRating(location);
 				}
 			});
 }
 
+// Calculates the average rating
 var doSetAverageRating = function(location) {
-	var i, reviewCount, ratingAverage, ratingTotal;
-	if (location.reviews && location.reviews.length > 1) {
-		reviewCount = location.reviews.length;
-		ratingTotal = 0;
+	var i, reviewCount, ratingAverage, ratingTotal = 0;
+	var reviews = location.reviews;
+	if (reviews && reviews.length > 0) {
+		reviewCount = reviews.length;
 		for (i = 0; i < reviewCount; i++) {
-			ratingTotal = ratingTotal + location.reviews[i].rating;
+			ratingTotal = ratingTotal + reviews[i].rating;
 		}
 		ratingAverage = parseInt(ratingTotal / reviewCount, 10);
 		location.rating = ratingAverage;
