@@ -94,8 +94,7 @@ module.exports.locationsReadOne = function(req, res) {
 				return;
 			}
 			sendJsonResponse(res, 200, location);
-			console.log('Locations success');		
-			console.log(location);
+			console.log('GET locations success');
 		});
 	} else {
 		sendJsonResponse(res, 404, {'message' : 'No locationid in request'});
@@ -148,7 +147,19 @@ module.exports.locationsUpdateOne = function(req, res) {
 };
 
 module.exports.locationsDeleteOne = function(req, res) {
-	sendJsonResponse(res, 200, {'status' : 'success'});	
+	const locationid = req.params.locationid;
+	if (req.params && locationid) {
+		Loc.findByIdAndRemove(locationid).exec(function(err, location) {
+			if (err) {
+				sendJsonResponse(res, 404, err);
+			} else {
+				sendJsonResponse(res, 202, null);
+				console.log('Deletion success');
+			}
+		});
+	} else {
+		sendJsonResponse(res, 404, {'message': 'No locationid'});
+	}
 };
 
 // json resonse function

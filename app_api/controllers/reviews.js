@@ -68,13 +68,13 @@ module.exports.reviewsUpdateOne = function(req, res) {
 	if (req.params && locationid && reviewid) {
 		Loc.findById(locationid).select('reviews')
 				.exec(function(err, location) {
-					var thisReview;
+					var thisReview = '';
 					if (!location) {
 						sendJsonResponse(res, 404, {'message': 'No locationid found'});
 					} else if (err) {
 						sendJsonResponse(res, 400, err);
 					}
-					const	reviews = location.reviews;
+					var	reviews = location.reviews;
 					if (reviews && reviews.length > 0) {
 						thisReview = reviews.id(reviewid);
 						if (!thisReview) {
@@ -105,7 +105,42 @@ module.exports.reviewsUpdateOne = function(req, res) {
 };
 
 module.exports.reviewsDeleteOne = function(req, res) {
-	sendJsonResponse(res, 200, {'status' : 'success'});
+	const locationid = req.params.locationid,
+				reviewid = req.params.reviewid;
+	if (req.params && locationid && reviewid) {
+		Loc.findById(locationid).select('reviews')
+				.exec(function(err, location) {
+					var thisReview = '';
+					if (!location) {
+						sendJsonResponse(res, 404, {'message': 'No location found'});
+						return;
+					} else if (err) {
+						sendJsonResponse(res, 404, err);
+					}
+					var reviews = location.reviews,
+						thisReview = reviews.id(reviewid);
+					if (reviews && reviews.length > 0) {
+						if (!thisReview) {
+							sendJsonResponse(res, 404, {'message': 'No reviewid found'});
+						} else {
+							location.reviews.id(reviewid).remove();
+							location.save(function(err) {
+								if (err) {
+									sendJsonResponse(res, 404, err);
+								} else {
+									updateAverageRating(location._id);
+									sendJsonResponse(res, 202, null);
+									console.log('Deletion success');
+								}
+							})
+						}
+					} else {
+							sendJsonResponse(res, 404, {'message': 'locationid and reviewid required'});
+					}
+				});
+	} else {
+		sendJsonResponse(res, 404, {'message': 'Deletion failed'});
+	}
 };
 
 // json resonse function
@@ -133,7 +168,6 @@ var doAddReview = function(req, res, location) {
 				thisReview = location.reviews[location.reviews.length - 1];
 				sendJsonResponse(res, 201, thisReview);
 				console.log('Isert success');
-				console.log(thisReview);
 			}
 		});
 	}
