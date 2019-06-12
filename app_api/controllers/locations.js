@@ -51,16 +51,15 @@ module.exports.locationsListByDistance = function(req, res) {
         console.log('Results success');
         console.table(locations);
       }
-    }
-	)			
-}
+    });			
+};
 
 module.exports.locationsCreate = function(req, res) {
 	Loc.create({
 		name: req.body.name,
 		address: req.body.address,
 		facilities: req.body.facilities.split(','),
-		coord: [parseFloat(req.body.lng), (req.body.lat)],
+		coords: [parseFloat(req.body.lng), parseFloat(req.body.lat)],
 		openingTimes: [{
 			days: req.body.days1,
 			opening: req.body.opening2,
@@ -78,6 +77,7 @@ module.exports.locationsCreate = function(req, res) {
 			sendJsonResponse(res, 404, err);
 		} else {
 			sendJsonResponse(res, 201, location);
+			console.log('Location creation success');
 		}	
 	});
 };
@@ -87,15 +87,14 @@ module.exports.locationsReadOne = function(req, res) {
 		Loc.findById(req.params.locationid).exec(function(err, location) {
 			if (!location) {
 				sendJsonResponse(res, 404, {'message' : 'Page not found'});
-				console.log('Page not found error');
+				console.log('Page not found');
 				return;
 			} else if (err) {
 				sendJsonResponse(res, 404, err);
 				return;
 			}
 			sendJsonResponse(res, 200, location);
-			console.log('Locations success');		
-			// console.log(location);	
+			console.log('GET locations success');
 		});
 	} else {
 		sendJsonResponse(res, 404, {'message' : 'No locationid in request'});
@@ -104,10 +103,63 @@ module.exports.locationsReadOne = function(req, res) {
 };
 
 module.exports.locationsUpdateOne = function(req, res) {
-	sendJsonResponse(res, 200, {'status' : 'success'});	
+	const locationid = req.params.locationid;
+	if (req.params && locationid) {
+		Loc.findById(locationid).select('-reviews -rating')
+			.exec(function(err, location) {
+				if (!location) {
+					sendJsonResponse(res, 404, {'message': 'location was not found'});
+				} else if (err) {
+					sendJsonResponse(res, 400, err);
+					return;
+				}
+					location.name = req.body.name;
+					location.address = req.body.address;
+					location.facilities = req.body.facilities.split(',');
+					location.coords = [parseFloat(req.body.lng), parseFloat(req.body.lat)];
+					location.openingTimes = [{
+						days: req.body.days1,
+						opening: req.body.opening1,
+						closing: req.body.closed1,
+						closed: req.body.closed1
+					},
+					{
+						days: req.body.days1,
+						opening: req.body.opening2,
+						closing: req.body.closed2,
+						closed: req.body.closed2
+					}]			
+						location.save(function(err, location) {
+					if (err) {
+						sendJsonResponse(res, 404, err);
+					} else {
+						sendJsonResponse(res, 200, location);
+						console.log('Update success');
+						console.log(location);
+					}
+				});
+		});
+
+	} else {
+		sendJsonResponse(res, 404, {'message': 'Not found. locationid is required'});
+		console.log('locationid not found');
+	}
 };
+
 module.exports.locationsDeleteOne = function(req, res) {
-	sendJsonResponse(res, 200, {'status' : 'success'});	
+	const locationid = req.params.locationid;
+	if (req.params && locationid) {
+		Loc.findByIdAndRemove(locationid).exec(function(err, location) {
+			if (err) {
+				sendJsonResponse(res, 404, err);
+			} else {
+				sendJsonResponse(res, 202, null);
+				console.log('Deletion success');
+			}
+		});
+	} else {
+		sendJsonResponse(res, 404, {'message': 'No locationid'});
+	}
 };
 
 // json resonse function

@@ -11,8 +11,4 @@ router.get('/location/review/new', ctrlLocations.addReview);
 /* Others page*/
 router.get('/generic-view', ctrlOthers.about);
 
-const animals = require('../controllers/animals');
-router.get('/cats', animals.cats);
-router.get('/birds', animals.birds);
-
 module.exports = router;

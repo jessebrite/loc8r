@@ -1,3 +1,4 @@
+const request = require('request');
 /* Get 'home page */
 module.exports.homelist = function(req, res) {
 	res.render('locations-list', {
