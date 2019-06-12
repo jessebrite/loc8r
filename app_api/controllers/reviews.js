@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Loc = mongoose.model('Location');
 
+// The POST method for review
 module.exports.reviewsCreate = function(req, res) {
 	var locationid = req.params.locationid;
 	if (req.params && locationid) {
@@ -19,6 +20,7 @@ module.exports.reviewsCreate = function(req, res) {
 	}
 };
 
+// The GET method for review
 module.exports.reviewsReadOne = function(req, res) {
 	var locationid = req.params.locationid;
 	var reviewid = req.params.reviewid;
@@ -42,11 +44,11 @@ module.exports.reviewsReadOne = function(req, res) {
 					console.log('reviewid not found');
 				} else {
 					response = {
-						location : {
-							name : location.name,
-							id : locationid
+						location: {
+							name: location.name,
+							id: locationid
 						},
-						review : review
+						review: review
 					};
 					sendJsonResponse(res, 200, response);
 					console.log('Page success');
@@ -62,6 +64,7 @@ module.exports.reviewsReadOne = function(req, res) {
 	}
 };
 
+// The UPDATE method for review
 module.exports.reviewsUpdateOne = function(req, res) {
 	const locationid = req.params.locationid,
 				reviewid = req.params.reviewid;
@@ -104,6 +107,7 @@ module.exports.reviewsUpdateOne = function(req, res) {
 	}
 };
 
+// the DELETE method for review
 module.exports.reviewsDeleteOne = function(req, res) {
 	const locationid = req.params.locationid,
 				reviewid = req.params.reviewid;
@@ -143,21 +147,22 @@ module.exports.reviewsDeleteOne = function(req, res) {
 	}
 };
 
-// json resonse function
+// json response function
 var sendJsonResponse = function(res, status, content) {
 	res.status(status);
 	res.json(content);
 }
 
 var doAddReview = function(req, res, location) {
-	if (!location) {
+	if (!location) { // thow a 404 error if location isn't found
 		sendJsonResponse(res, 404, {"message": "locationid not found"});
-	} else {
+	} else { // Add reviews
 			location.reviews.push({
 				author: req.body.author,
 				rating: req.body.rating,
 				reviewText: req.body.reviewText
 		});
+		// Persist the location
 		location.save(function(err, location) {
 			var thisReview;
 			if (err) {
@@ -165,9 +170,10 @@ var doAddReview = function(req, res, location) {
 			} else {
 				// Call the updateAverageRating function
 				updateAverageRating(location.id);
+				// Capture the last review into thisReview
 				thisReview = location.reviews[location.reviews.length - 1];
 				sendJsonResponse(res, 201, thisReview);
-				console.log('Isert success');
+				console.log('Insert success');
 			}
 		});
 	}
