@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Loc = mongoose.model('Location');
 const theEarth  = (function() {
-	const earthRadius = 6371; // km, miles is 3959
+const earthRadius = 6371; // km, miles is 3959
 
 	const getDistanceFromRads = function(rads) {
 		return parseFloat(rads * earthRadius)
@@ -23,22 +23,27 @@ module.exports.locationsListByDistance = function(req, res) {
 		type: "Point",
 		coordinates: [lng, lat]
 	};
-	var geoOptions = { 
-		spherical: true,
-		maxDistance: theEarth.getRadsFromDistance(20),
-		num: 10
-	};
-	if (!lng || !lat) {
+
+	// var geoOptions = { 
+	// 	spherical: true,
+	// 	maxDistance: theEarth.getRadsFromDistance(maxDistance),
+	// 	num: 10
+	// };
+
+	if ((!lng && lng !== 0) || (!lat && lat !== 0)) {
 		sendJsonResponse(res, 404, {"message": "lng and lat query parameters are required"});
 		return;
 	}
 	Loc.aggregate(
 		[{
 			'$geoNear': {
-				'near': point,
+				'near': {
+					type: 'Point',
+					coordinates: [parseFloat(req.query.lng), parseFloat(req.query.lat)]
+				},
 				'spherical': true,
 				'distanceField': 'dist.calculated',
-				'maxDistance': maxDistance
+				'maxDistance': theEarth.getRadsFromDistance(maxDistance)
 			}
 		}],
 		function(err, results) {
@@ -115,18 +120,18 @@ module.exports.locationsUpdateOne = function(req, res) {
 				}
 					location.name = req.body.name;
 					location.address = req.body.address;
-					location.facilities = req.body.facilities.split(',');
+					location.facilities = req.body.facilities.trim().split(', ');
 					location.coords = [parseFloat(req.body.lng), parseFloat(req.body.lat)];
 					location.openingTimes = [{
 						days: req.body.days1,
 						opening: req.body.opening1,
-						closing: req.body.closed1,
+						closing: req.body.closing1,
 						closed: req.body.closed1
 					},
 					{
 						days: req.body.days1,
 						opening: req.body.opening2,
-						closing: req.body.closed2,
+						closing: req.body.closing2,
 						closed: req.body.closed2
 					}]			
 						location.save(function(err, location) {
@@ -135,7 +140,6 @@ module.exports.locationsUpdateOne = function(req, res) {
 					} else {
 						sendJsonResponse(res, 200, location);
 						console.log('Update success');
-						console.log(location);
 					}
 				});
 		});

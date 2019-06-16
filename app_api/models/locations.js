@@ -3,13 +3,13 @@ const mongoose = require('mongoose');
 // OPENING TIME SCHEMA
 const openingTimeSchema = new mongoose.Schema({
 	days: {type: String, required: true},
-	opening: String,
-	closing: String,
+	opening: {type: String, required: false},
+	closing: {type: String, required: false},
 	closed: {type: Boolean, required: true}
 }),
 // REVIEW SCHEMA
 	reviewSchema = new mongoose.Schema({
-	author: String,
+	author: {type: String, required: true},
 	rating: {type: Number, required:true, min:0, max:5},
 	reviewText: String,
 	createdOn: {type:Date, "default":Date.now}

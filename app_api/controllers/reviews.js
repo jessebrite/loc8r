@@ -10,6 +10,7 @@ module.exports.reviewsCreate = function(req, res) {
 				.exec(function(err, location) {
 					if (err) {
 						sendJsonResponse(res, 404, err);
+						console.log('Wrong locationid')
 					} else {
 						// Call the doAddReview function
 						doAddReview(req, res, location);
@@ -66,7 +67,7 @@ module.exports.reviewsReadOne = function(req, res) {
 
 // The UPDATE method for review
 module.exports.reviewsUpdateOne = function(req, res) {
-	const locationid = req.params.locationid,
+	var locationid = req.params.locationid,
 				reviewid = req.params.reviewid;
 	if (req.params && locationid && reviewid) {
 		Loc.findById(locationid).select('reviews')
@@ -109,7 +110,7 @@ module.exports.reviewsUpdateOne = function(req, res) {
 
 // the DELETE method for review
 module.exports.reviewsDeleteOne = function(req, res) {
-	const locationid = req.params.locationid,
+	var locationid = req.params.locationid,
 				reviewid = req.params.reviewid;
 	if (req.params && locationid && reviewid) {
 		Loc.findById(locationid).select('reviews')
@@ -166,10 +167,11 @@ var doAddReview = function(req, res, location) {
 		location.save(function(err, location) {
 			var thisReview;
 			if (err) {
-				sendJsonResponse(res, 404, err);
+				sendJsonResponse(res, 400, err);
+				console.log('Error found')
 			} else {
 				// Call the updateAverageRating function
-				updateAverageRating(location.id);
+				updateAverageRating(location._id);
 				// Capture the last review into thisReview
 				thisReview = location.reviews[location.reviews.length - 1];
 				sendJsonResponse(res, 201, thisReview);

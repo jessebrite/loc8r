@@ -3,3 +3,8 @@
 .review-header {margin-bottom: 10px;}
 .reviewAuthor {margin: 0 5px;}
 .reviewTimestamp {color: #ccc;}
+span.label.label-warning {
+	margin-right: 2px;
+	font-size: 14px;
+}
+span.label.label-warning:last-child {margin: 0}
