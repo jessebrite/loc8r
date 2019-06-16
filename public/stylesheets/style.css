@@ -8,3 +8,7 @@ span.label.label-warning {
 	font-size: 14px;
 }
 span.label.label-warning:last-child {margin: 0}
+.alert-default{
+	/*color: lightgreen;*/
+	background-color: darkseagreen;
+}

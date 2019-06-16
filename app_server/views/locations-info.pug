@@ -31,9 +31,9 @@ block content
               h2.panel-title Facilities
             .panel-body
               each facility in location.facilities
-                span.label.label-warning
+                span.label.label-warning= facility.charAt(0).toUpperCase() + facility.slice(1)
                   span.fas.fa-check
-                  | &nbsp;#{facility}
+                  | &nbsp;
                 | &nbsp;
         .col-xs-12.col-sm-6.location-map
           .panel.panel-primary

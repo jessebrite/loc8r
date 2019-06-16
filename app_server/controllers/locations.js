@@ -106,18 +106,24 @@ module.exports.doAddReview = function(req, res) {
 		json: postData
 	};
 	
-	request(requestOptions, function(err, response, body) {
-		if (err) {
-			console.log(err)
-		} else if (response.statusCode !== 201) {
-			_showError(req, res, response.statusCode);
-			console.log(response.statusCode);
-		} else {
-			res.redirect('/location/' + locationid);
-			console.log('Review addition success');
-			console.log('Location success: status code ' + response.statusCode);
-		}
-	});
+	if (!postData.author || !postData.rating || !postData.reviewText) {
+		res.redirect('/location/' + locationid + '/review/new?err=val');
+	} else {
+			request(requestOptions, function(err, response, body) {
+				if (err) {
+					console.log(err)
+				} else if (response.statusCode === 400 && body.name && body.name === 'ValidationError') {
+					res.redirect('/location/' + locationid + '/review/new?err=val');
+				} else if (response.statusCode !== 201) {
+					_showError(req, res, response.statusCode);
+					console.log(response.statusCode);
+				} else {
+					res.redirect('/location/' + locationid);
+					console.log('Review addition success');
+					console.log('Location success: status code ' + response.statusCode);
+				}
+			});
+	}
 
 }
 
@@ -151,7 +157,8 @@ var getLocationInfo = function(req, res, callback) {
 var renderReviewForm = function(req, res, locDetail) {
 	res.render('location-review-form', {
 		title: 'Review ' + locDetail.name + ' on Loc8r',
-		pageHeader: {title: 'Review ' + locDetail.name}
+		pageHeader: {title: 'Review ' + locDetail.name},
+		error: req.query.err
 	});
 }
 
