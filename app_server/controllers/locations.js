@@ -9,14 +9,7 @@ if (process.env.NODE_ENV === 'production') {
 var requestOptions, path;
 
 /* Get 'home page */
-var renderHomePage = function(req, res, responseBody) {
-	var message;
-	if (!(responseBody instanceof Array)) {
-		message = "API lookup error";
-		responseBody = [];
-	} else if (!responseBody.length) {
-			message = "No places found nearby";
-	}
+var renderHomePage = function(req, res) {
 	res.render('locations-list', {
 	  title: 'Loc8r - find a place to work with wifi',
 	  pageHeader: {
@@ -25,42 +18,11 @@ var renderHomePage = function(req, res, responseBody) {
 	  },
 	  sidebar: "Looking for wifi and a seat? Loc8r helps you find places to work when out and about."
 	  			 + " Perhaps with coffee, cake or a pint? Let Loc8r help you find the place you're looking for.",
-	  locations: responseBody,
-	  message: message
 	});
 }
 
-module.exports.homelist = function(req, res) {
-	path = '/api/locations';
-	requestOptions = {
-		url: apiOptions.server + path,
-		method: 'GET',
-		json: {},
-		qs: {
-			lng: -0.12445156,
-			lat: 41.21529623,
-			// maxDistance: 2000
-		}
-	};
-	// Make a request to the given URL
-	request(requestOptions, function(err, response, body) {
-		var i, data = body;
-		// Only loop if the status code is 200 and there is data 
-		if (response.statusCode === 200 && data.length) {
-			for (i = 0; i < data.length; i++) {
-				data[i].distance = _formatDistance(data[i].distance);
-			}
-		}
-		// Trap every possible error
-		if (err) {
-			console.log(err)
-		} else if (response.statusCode !== 200) {
-				console.log(response.statusCode);
-		}
-
-			// console.log(body)
-			renderHomePage(req, res, data);
-	});
+module.exports.homelist = function(req, res) {	
+			renderHomePage(req, res);
 }
 
 var renderDetailsPage = function(req, res, locDetail) {
@@ -160,24 +122,6 @@ var renderReviewForm = function(req, res, locDetail) {
 		pageHeader: {title: 'Review ' + locDetail.name},
 		error: req.query.err
 	});
-}
-
-var _formatDistance = function(distance) {
-	var numDistance, unit;
-	// If distance is found and is a number, go ahead and parse it
-	if (distance && typeof(distance) == 'number') {
-		if (distance > 1) {
-			numDistance = parseFloat(distance).toFixed(1);
-			unit = 'km';
-		} else {
-			numDistance = parseInt(distance * 1000,00);
-			unit = 'm';
-		}
-		return numDistance + unit;
-		// Else, log error to consle
-	} else {
-		console.log('Disatnce must be a number. ' + distance + ' found');
-	}
 }
 
 var _showError = function(req, res, status) {

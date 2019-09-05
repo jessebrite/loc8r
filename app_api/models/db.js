@@ -11,7 +11,7 @@ mongoose.connect(dbURI, { useNewUrlParser: true });
 
 // CONNECTION EVENTS
 mongoose.connection.on('connected', function () {
-	console.log('Mongoose connected to ' + dbURI);
+	console.log('Mongoose connected');
 });
 mongoose.connection.on('error',function (err) {
 	console.log('Mongoose connection error: ' + err);
