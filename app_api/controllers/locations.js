@@ -24,12 +24,6 @@ module.exports.locationsListByDistance = function(req, res) {
 		coordinates: [lng, lat]
 	};
 
-	// var geoOptions = { 
-	// 	spherical: true,
-	// 	maxDistance: theEarth.getRadsFromDistance(maxDistance),
-	// 	num: 10
-	// };
-
 	if ((!lng && lng !== 0) || (!lat && lat !== 0)) {
 		sendJsonResponse(res, 404, {"message": "lng and lat query parameters are required"});
 		return;
