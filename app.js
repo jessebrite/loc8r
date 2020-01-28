@@ -3,7 +3,8 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan'); // Not currently using
+const logger = require('morgan');
+const favicon = require('serve-favicon'); // Not using this feature currently
 require('./app_api/models/db') // importing the DB
 
 const indexRouter = require('./app_server/routes/index');

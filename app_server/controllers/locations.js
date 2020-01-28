@@ -9,8 +9,8 @@ if (process.env.NODE_ENV === 'production') {
 var requestOptions, path;
 
 /* Get 'home page' */
-var renderHomepage = function(req, res, responseBody){
-  var message;
+const renderHomepage = function(req, res, responseBody){
+  let message = '';
   if (!(responseBody instanceof Array)) {
     message = 'API lookup error';
     responseBody = [];
@@ -62,7 +62,7 @@ module.exports.homelist = function(req, res) {
 		}
 
 			// console.log(body)
-			renderHomePage(req, res, data);
+			renderHomepage(req, res, data);
 	});
 }
 
@@ -130,7 +130,7 @@ module.exports.doAddReview = function(req, res) {
 
 }
 
-var getLocationInfo = function(req, res, callback) {
+const getLocationInfo = function(req, res, callback) {
 	path = '/api/locations/' + req.params.locationid;
 	requestOptions = {
 		url: apiOptions.server + path,
@@ -166,7 +166,20 @@ var renderReviewForm = function(req, res, locDetail) {
 	});
 }
 
-var _showError = function(req, res, status) {
+const _formatDistance = (distance) => {
+  let thisDistance = 0;
+  let unit = 'm';
+  if (distance > 1000) {
+    thisDistance = parseFloat(distance / 1000).toFixed(1);
+    unit = 'km';
+  } else {
+    thisDistance = Math.floor(distance);
+  }
+  return thisDistance + unit;
+
+}
+
+const _showError = function(req, res, status) {
 	var title, content;
 	if (status === 404) {
 		title = status + ': page not found';
