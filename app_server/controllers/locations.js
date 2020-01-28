@@ -1,15 +1,13 @@
-var request = require('request');
+const request = require('request');
 // Set default server for the URL
-var apiOptions = { server: "http://localhost:3000" }
+const apiOptions = { server: "http://localhost:3000" }
 // If in a production environment, use the live-hosted URL
 if (process.env.NODE_ENV === 'production') {
 	apiOptions.server = "https://boiling-stream-84042.herokuapp.com/";
 }
 
-var requestOptions, path;
-
 /* Get 'home page' */
-const renderHomepage = function(req, res, responseBody){
+const renderHomepage = (req, res, responseBody) => {
   let message = '';
   if (!(responseBody instanceof Array)) {
     message = 'API lookup error';
@@ -33,9 +31,9 @@ const renderHomepage = function(req, res, responseBody){
 	});
 }
 
-module.exports.homelist = function(req, res) {
-	path = '/api/locations';
-	requestOptions = {
+module.exports.homelist = (req, res) => {
+	const path = '/api/locations';
+	const requestOptions = {
 		url: apiOptions.server + path,
 		method: 'GET',
 		json: {},
@@ -46,8 +44,8 @@ module.exports.homelist = function(req, res) {
 		}
 	};
 	// Make a request to the given URL
-	request(requestOptions, function(err, response, body) {
-		var i, data = body;
+	request(requestOptions, (err, response, body) => {
+		let i, data = body;
 		// Only loop if the status code is 200 and there is data
 		if (response.statusCode === 200 && data.length) {
 			for (i = 0; i < data.length; i++) {
@@ -66,7 +64,7 @@ module.exports.homelist = function(req, res) {
 	});
 }
 
-var renderDetailsPage = function(req, res, locDetail) {
+const renderDetailsPage = (req, res, locDetail) => {
 	res.render('locations-info', {
 		title: locDetail.name,
 		pageHeader: {title: locDetail.name},
@@ -77,33 +75,33 @@ var renderDetailsPage = function(req, res, locDetail) {
 			' it - or if you don\'t - please leave a review to help other people just like you.'
 		},
 		location: locDetail
-	});responseBodyresponseBodyresponseBody
+	});
 }
 
 /* Get 'locations' info */
-module.exports.locationInfo = function(req, res) {
+module.exports.locationInfo = (req, res) => {
 	getLocationInfo(req, res, function(req, res, responseData) {
 		renderDetailsPage(req, res, responseData);
 	});
 }
 
 /* Get 'Add review' page*/
-module.exports.addReview = function(req, res) {
-	getLocationInfo(req, res, function(req, res, responseData) {
+module.exports.addReview = (req, res) => {
+	getLocationInfo(req, res, (req, res, responseData) => {
 		renderReviewForm(req, res, responseData);
 	});
 }
 
-module.exports.doAddReview = function(req, res) {
-	var locationid = req.params.locationid;
-	path = '/api/locations/' + locationid + '/reviews';
-	var postData = {
+module.exports.doAddReview = (req, res) => {
+	const locationid = req.params.locationid;
+  const	path = '/api/locations/' + locationid + '/reviews';
+	const postData = {
 		author: req.body.name,
 		rating: parseInt(req.body.rating, 10),
 		reviewText: req.body.review
 	}
 
-	requestOptions = {
+	const requestOptions = {
 		url: apiOptions.server + path,
 		method: 'POST',
 		json: postData
@@ -112,7 +110,7 @@ module.exports.doAddReview = function(req, res) {
 	if (!postData.author || !postData.rating || !postData.reviewText) {
 		res.redirect('/location/' + locationid + '/review/new?err=val');
 	} else {
-			request(requestOptions, function(err, response, body) {
+			request(requestOptions, (err, response, body) => {
 				if (err) {
 					console.log(err)
 				} else if (response.statusCode === 400 && body.name && body.name === 'ValidationError') {
@@ -130,17 +128,17 @@ module.exports.doAddReview = function(req, res) {
 
 }
 
-const getLocationInfo = function(req, res, callback) {
-	path = '/api/locations/' + req.params.locationid;
-	requestOptions = {
+const getLocationInfo = (req, res, callback) => {
+  const	path = '/api/locations/' + req.params.locationid;
+	  const requestOptions = {
 		url: apiOptions.server + path,
 		method: 'GET',
 		json: {}
 	};
 
-	request(requestOptions, function(err, response, body) {
+	request(requestOptions, (err, response, body) => {
     renderHomepage(req, res, body);
-		var data = body;
+		const data = body;
 		if (err) {
 			console.log(err)
 		} else if (response.statusCode !== 200) {
@@ -158,7 +156,7 @@ const getLocationInfo = function(req, res, callback) {
 	});
 }
 
-var renderReviewForm = function(req, res, locDetail) {
+const renderReviewForm = (req, res, locDetail) => {
 	res.render('location-review-form', {
 		title: 'Review ' + locDetail.name + ' on Loc8r',
 		pageHeader: {title: 'Review ' + locDetail.name},
@@ -179,8 +177,8 @@ const _formatDistance = (distance) => {
 
 }
 
-const _showError = function(req, res, status) {
-	var title, content;
+const _showError = (req, res, status) => {
+  let title, content;
 	if (status === 404) {
 		title = status + ': page not found';
 		content = "Oh dear. Looks like we can't find this page. Sorry.";

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Loc = mongoose.model('Location');
-const theEarth  = (function() {
+const theEarth  = ( () => {
 const earthRadius = 6371; // km, miles is 3959
 
 	const getDistanceFromRads = function(rads) {
@@ -15,11 +15,11 @@ const earthRadius = 6371; // km, miles is 3959
 	};
 }) ();
 
-module.exports.locationsListByDistance = function(req, res) {
-	var lng = parseFloat(req.query.lng);
-	var lat = parseFloat(req.query.lat);
-	var maxDistance = parseFloat(req.query.maxDistance);
-	var point = {
+module.exports.locationsListByDistance = (req, res) => {
+	let lng = parseFloat(req.query.lng);
+	let lat = parseFloat(req.query.lat);
+	let maxDistance = parseFloat(req.query.maxDistance);
+	let point = {
 		type: "Point",
 		coordinates: [lng, lat]
 	};
@@ -48,12 +48,12 @@ module.exports.locationsListByDistance = function(req, res) {
         locations = buildLocationList(req, res, results);
         sendJsonResponse(res, 200, locations);
         console.log('Results success');
-        console.table(locations);
+        // console.table(locations);
       }
-    });			
+    });
 };
 
-module.exports.locationsCreate = function(req, res) {
+module.exports.locationsCreate = (req, res) => {
 	Loc.create({
 		name: req.body.name,
 		address: req.body.address,
@@ -77,13 +77,13 @@ module.exports.locationsCreate = function(req, res) {
 		} else {
 			sendJsonResponse(res, 201, location);
 			console.log('Location creation success');
-		}	
+		}
 	});
 };
 
-module.exports.locationsReadOne = function(req, res) {
+module.exports.locationsReadOne = (req, res) => {
 	if (req.params && req.params.locationid) {
-		Loc.findById(req.params.locationid).exec(function(err, location) {
+		Loc.findById(req.params.locationid).exec( (err, location) => {
 			if (!location) {
 				sendJsonResponse(res, 404, {'message' : 'Page not found'});
 				console.log('Page not found');
@@ -101,11 +101,11 @@ module.exports.locationsReadOne = function(req, res) {
 	}
 };
 
-module.exports.locationsUpdateOne = function(req, res) {
+module.exports.locationsUpdateOne = (req, res) => {
 	const locationid = req.params.locationid;
 	if (req.params && locationid) {
 		Loc.findById(locationid).select('-reviews -rating')
-			.exec(function(err, location) {
+			.exec( (err, location) => {
 				if (!location) {
 					sendJsonResponse(res, 404, {'message': 'location was not found'});
 				} else if (err) {
@@ -127,8 +127,8 @@ module.exports.locationsUpdateOne = function(req, res) {
 						opening: req.body.opening2,
 						closing: req.body.closing2,
 						closed: req.body.closed2
-					}]			
-						location.save(function(err, location) {
+					}]
+						location.save( (err, location) => {
 					if (err) {
 						sendJsonResponse(res, 404, err);
 					} else {
@@ -144,10 +144,10 @@ module.exports.locationsUpdateOne = function(req, res) {
 	}
 };
 
-module.exports.locationsDeleteOne = function(req, res) {
+module.exports.locationsDeleteOne = (req, res) => {
 	const locationid = req.params.locationid;
 	if (req.params && locationid) {
-		Loc.findByIdAndRemove(locationid).exec(function(err, location) {
+		Loc.findByIdAndRemove(locationid).exec( (err, location) => {
 			if (err) {
 				sendJsonResponse(res, 404, err);
 			} else {
@@ -161,14 +161,14 @@ module.exports.locationsDeleteOne = function(req, res) {
 };
 
 // json resonse function
-var sendJsonResponse = function(res, status, content) {
+var sendJsonResponse = (res, status, content) => {
 	res.status(status);
 	res.json(content);
 }
 
-var buildLocationList = function(req, res, results) {
+var buildLocationList = (req, res, results) => {
 	var locations = [];
-	results.forEach(function(doc) {
+	results.forEach( doc => {
 		locations.push({
 			distance: doc.dist.calculated,
 			name: doc.name,
