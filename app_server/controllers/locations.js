@@ -8,6 +8,7 @@ if (process.env.NODE_ENV === 'production') {
 
 var requestOptions, path;
 
+<<<<<<< HEAD
 /* Get 'home page' */
 var renderHomepage = function(req, res, responseBody){
   var message;
@@ -19,6 +20,10 @@ var renderHomepage = function(req, res, responseBody){
       message = 'No places found nearby';
     }
   }
+=======
+/* Get 'home page */
+var renderHomePage = function(req, res) {
+>>>>>>> bc25e8d80d5c3fc728847ffc5bbacc8064c9ce05
 	res.render('locations-list', {
 	  title: 'Loc8r - find a place to work with wifi',
 	  pageHeader: {
@@ -26,6 +31,7 @@ var renderHomepage = function(req, res, responseBody){
 	  	strapline: 'Find places to work with near you!'
 	  },
 	  sidebar: "Looking for wifi and a seat? Loc8r helps you find places to work when out and about."
+<<<<<<< HEAD
            + " Perhaps with coffee, cake or a pint? Let Loc8r help you find the place you're looking for.",
           locations: responseBody,
           message: message
@@ -33,24 +39,36 @@ var renderHomepage = function(req, res, responseBody){
 }
 
 module.exports.homelist = function(req, res) {
-  path = 'api/locations';
-  requestOptions = {
-    url: apiOptions.server + path,
-    method: 'GET',
-    json: {},
-    qs: {
-      lng : -0.7992599,
-      lat : 51.378091,
-      maxDistance : 20
-    }
-  };
-  request(
-    requestOptions,
-    function(err, response, body) {
-      renderHomepage(req, res, body);
-    }
-  );
+	path = '/api/locations';
+	requestOptions = {
+		url: apiOptions.server + path,
+		method: 'GET',
+		json: {},
+		qs: {
+			lng: -0.12445156,
+			lat: 41.21529623,
+			// maxDistance: 2000
+		}
+	};
+	// Make a request to the given URL
+	request(requestOptions, function(err, response, body) {
+		var i, data = body;
+		// Only loop if the status code is 200 and there is data 
+		if (response.statusCode === 200 && data.length) {
+			for (i = 0; i < data.length; i++) {
+				data[i].distance = _formatDistance(data[i].distance);
+			}
+		}
+		// Trap every possible error
+		if (err) {
+			console.log(err)
+		} else if (response.statusCode !== 200) {
+				console.log(response.statusCode);
+		}
 
+			// console.log(body)
+			renderHomePage(req, res, data);
+	});
 }
 
 var renderDetailsPage = function(req, res, locDetail) {
