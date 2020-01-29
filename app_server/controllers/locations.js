@@ -44,10 +44,10 @@ module.exports.homelist = (req, res) => {
 		}
 	};
 	// Make a request to the given URL
-	request(requestOptions, (err, response, body) => {
+	request(requestOptions, (err, {statusCode}, body) => {
 		const data = body;
 		// Only loop if the status code is 200 and there is data
-		if (response.statusCode === 200 && data.length) {
+		if (statusCode === 200 && data.length) {
 			for (let i = 0; i < data.length; i++) {
 				data[i].distance = formatDistance(data[i].distance);
 			}
@@ -55,8 +55,8 @@ module.exports.homelist = (req, res) => {
 		// Trap every possible error
 		if (err) {
 			console.log(err)
-		} else if (response.statusCode !== 200) {
-				console.log(response.statusCode);
+		} else if (statusCode !== 200) {
+				console.log(statusCode);
 		}
 
 			// console.log(body)
@@ -78,7 +78,7 @@ const renderDetailsPage = (req, res, locDetail) => {
 	});
 }
 
-/* Get 'locations' info */
+/* Get 'locations info' page */
 module.exports.locationInfo = (req, res) => {
   const path = `/api/locations/${req.params.locationid}`;
   const requestOptions = {
@@ -101,7 +101,7 @@ module.exports.addReview = (req, res) => {
 
 module.exports.doAddReview = (req, res) => {
 	const locationid = req.params.locationid;
-  const	path = '/api/locations/' + locationid + '/reviews';
+  const	path = `/api/locations/${locationid}/reviews`;
 	const postData = {
 		author: req.body.name,
 		rating: parseInt(req.body.rating, 10),
@@ -115,24 +115,23 @@ module.exports.doAddReview = (req, res) => {
 	};
 
 	if (!postData.author || !postData.rating || !postData.reviewText) {
-		res.redirect('/location/' + locationid + '/review/new?err=val');
+		res.redirect(`/locations/${locationid}/review/new?err=val`);
 	} else {
-			request(requestOptions, (err, response, body) => {
+			request(requestOptions, (err, {statusCode}, body) => {
 				if (err) {
 					console.log(err)
-				} else if (response.statusCode === 400 && body.name && body.name === 'ValidationError') {
-					res.redirect('/location/' + locationid + '/review/new?err=val');
-				} else if (response.statusCode !== 201) {
-					showError(req, res, response.statusCode);
-					console.log(response.statusCode);
+				} else if (statusCode === 400 && body.name && body.name === 'ValidationError') {
+					res.redirect(`/locations/${locationid}/review/new?err=val`);
+				} else if (statusCode !== 201) {
+					showError(req, res, statusCode);
+					console.log(statusCode);
 				} else {
-					res.redirect('/location/' + locationid);
+					res.redirect(`/locations/${locationid}`);
 					console.log('Review addition success');
-					console.log('Location success: status code ' + response.statusCode);
+					console.log(`Location success: status code ${statusCode}`);
 				}
 			});
 	}
-
 }
 
 const getLocationInfo = (req, res, callback) => {
@@ -165,8 +164,8 @@ const getLocationInfo = (req, res, callback) => {
 
 const renderReviewForm = (req, res, locDetail) => {
 	res.render('location-review-form', {
-		title: 'Review ' + locDetail.name + ' on Loc8r',
-		pageHeader: {title: 'Review ' + locDetail.name},
+		title: `Review ${locDetail.name} on Loc8r`,
+		pageHeader: {title: `Review ${locDetail.name}`},
 		error: req.query.err
 	});
 }

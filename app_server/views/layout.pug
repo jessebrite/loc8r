@@ -23,6 +23,8 @@ html(ng-app='loc8rApp')
           ul.navbar-nav.mr-auto
             li.nav-item
               a.nav-link(href='/generic-view') About
+            li.nav-item
+              a.nav-link(href='/contact') Contact Us
 
     .container.content
       block content
@@ -30,4 +32,7 @@ html(ng-app='loc8rApp')
       footer
         .row
           .col-xs-12
-            small &copy; Jesse Brite - 2019
+            small &copy;Jessebrite -
+            script.
+              document.write(new Date().getFullYear())
+

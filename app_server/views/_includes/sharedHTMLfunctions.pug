@@ -1,14 +1,19 @@
 mixin outputRating(rating)
-  - for (var i = 1; i <= rating; i++)
+  - for (let i = 1; i <= rating; i++)
     span.fas.fa-star
-  - for (i = rating; i < 5; i++)
+  - for (let i = rating; i < 5; i++)
     span.far.fa-star
 
 mixin formatDate(dateString)
-  - var date = new Date(dateString);
-  - var d = date.getDate();
-  - var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
-  - var m = monthNames[date.getMonth()];
-  - var y = date.getFullYear();
-  - var output = d + ' ' + m + ' ' + y;
+  - const date = new Date(dateString);
+  - const d = date.getDate();
+  - const monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+  - const m = monthNames[date.getMonth()];
+  - const y = date.getFullYear();
+  - const output = `${d} ${m} ${y}`;
   =output
+
+mixin currentDate()
+  - const date = new Date();
+  - const y = date.getFullYear();
+  =y
