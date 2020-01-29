@@ -45,11 +45,11 @@ module.exports.homelist = (req, res) => {
 	};
 	// Make a request to the given URL
 	request(requestOptions, (err, response, body) => {
-		let i, data = body;
+		const data = body;
 		// Only loop if the status code is 200 and there is data
 		if (response.statusCode === 200 && data.length) {
-			for (i = 0; i < data.length; i++) {
-				data[i].distance = _formatDistance(data[i].distance);
+			for (let i = 0; i < data.length; i++) {
+				data[i].distance = formatDistance(data[i].distance);
 			}
 		}
 		// Trap every possible error
@@ -80,10 +80,17 @@ const renderDetailsPage = (req, res, locDetail) => {
 
 /* Get 'locations' info */
 module.exports.locationInfo = (req, res) => {
+  const path = `/api/locations/${req.params.locationid}`;
+  const requestOptions = {
+    url: `${apiOptions.server}${path}`,
+    method: 'GET',
+    json: {}
+  };
+
 	getLocationInfo(req, res, function(req, res, responseData) {
 		renderDetailsPage(req, res, responseData);
-	});
-}
+  });
+};
 
 /* Get 'Add review' page*/
 module.exports.addReview = (req, res) => {
@@ -116,7 +123,7 @@ module.exports.doAddReview = (req, res) => {
 				} else if (response.statusCode === 400 && body.name && body.name === 'ValidationError') {
 					res.redirect('/location/' + locationid + '/review/new?err=val');
 				} else if (response.statusCode !== 201) {
-					_showError(req, res, response.statusCode);
+					showError(req, res, response.statusCode);
 					console.log(response.statusCode);
 				} else {
 					res.redirect('/location/' + locationid);
@@ -129,21 +136,21 @@ module.exports.doAddReview = (req, res) => {
 }
 
 const getLocationInfo = (req, res, callback) => {
-  const	path = '/api/locations/' + req.params.locationid;
-	  const requestOptions = {
-		url: apiOptions.server + path,
+  const path = `/api/locations/${req.params.locationid}`;
+	const requestOptions = {
+    url : `${apiOptions.server}${path}`,
 		method: 'GET',
 		json: {}
 	};
 
-	request(requestOptions, (err, response, body) => {
-    renderHomepage(req, res, body);
-		const data = body;
+	request(requestOptions, (err, {statusCode}, body) => {
+    // renderHomepage(req, res, body);
+		let data = body;
 		if (err) {
 			console.log(err)
-		} else if (response.statusCode !== 200) {
-			_showError(req, res, response.statusCode);
-			console.log(response.statusCode);
+		} else if (statusCode !== 200) {
+			showError(req, res, statusCode);
+			console.log(statusCode);
 		} else {
 			data.coords = {
 				lng: body.coords[0],
@@ -151,10 +158,10 @@ const getLocationInfo = (req, res, callback) => {
 			}
 			callback(req, res, data);
 			// console.log(data);
-			console.log('Location success: status code ' + response.statusCode);
+			console.log(`Location success: status code ${statusCode}`);
 		}
-	});
-}
+  });
+};
 
 const renderReviewForm = (req, res, locDetail) => {
 	res.render('location-review-form', {
@@ -164,7 +171,7 @@ const renderReviewForm = (req, res, locDetail) => {
 	});
 }
 
-const _formatDistance = (distance) => {
+const formatDistance = (distance) => {
   let thisDistance = 0;
   let unit = 'm';
   if (distance > 1000) {
@@ -177,7 +184,7 @@ const _formatDistance = (distance) => {
 
 }
 
-const _showError = (req, res, status) => {
+const showError = (req, res, status) => {
   let title, content;
 	if (status === 404) {
 		title = status + ': page not found';

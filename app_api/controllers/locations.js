@@ -161,13 +161,13 @@ module.exports.locationsDeleteOne = (req, res) => {
 };
 
 // json resonse function
-var sendJsonResponse = (res, status, content) => {
+const sendJsonResponse = (res, status, content) => {
 	res.status(status);
 	res.json(content);
 }
 
-var buildLocationList = (req, res, results) => {
-	var locations = [];
+const buildLocationList = (req, res, results) => {
+	let locations = [];
 	results.forEach( doc => {
 		locations.push({
 			distance: doc.dist.calculated,

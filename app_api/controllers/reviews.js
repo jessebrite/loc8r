@@ -57,7 +57,7 @@ module.exports.reviewsReadOne = function(req, res) {
 			} else {
 				sendJsonResponse(res, 404, {'message' : 'No review found'});
 				console.log('Review page not found');
-			} 
+			}
 		});
 	} else {
 			sendJsonResponse(res, 404, {'message' : 'locationid and reviewid are both required'});
@@ -128,7 +128,7 @@ module.exports.reviewsDeleteOne = function(req, res) {
 						if (!thisReview) {
 							sendJsonResponse(res, 404, {'message': 'No reviewid found'});
 						} else {
-							location.reviews.id(reviewid).remove();
+							location.reviews.id(reviewid).deleteOne();
 							location.save(function(err) {
 								if (err) {
 									sendJsonResponse(res, 404, err);

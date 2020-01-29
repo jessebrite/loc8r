@@ -1,4 +1,4 @@
 /* Get 'about' page */
-module.exports.about = function (req, res) {
-	res.render('generic-view', {title : 'About'});
+module.exports.about = (req, res) => {
+	res.render('generic-view', { title : 'About' });
 }

@@ -1,50 +1,51 @@
 const mongoose = require('mongoose');
 //Initialize MongoDB local
-var dbURI = 'mongodb://localhost/loc8r';
+const dbURI = 'mongodb://localhost/loc8r';
 
  // If in production mode, set connection string to production DB
 if (process.env.NODE_ENV  === 'production') {
 	dbURI = process.env.MONGOdb_URL;
 }
 // DB CONNECTION
-mongoose.connect(dbURI, { useNewUrlParser: true });
+mongoose.connect(dbURI, { useCreateIndex: true,
+  useNewUrlParser: true, useUnifiedTopology: true });
 
 // CONNECTION EVENTS
-mongoose.connection.on('connected', function () {
+mongoose.connection.on('connected', () => {
 	console.log('Mongoose connected');
 });
-mongoose.connection.on('error',function (err) {
+mongoose.connection.on('error', err => {
 	console.log('Mongoose connection error: ' + err);
 });
-mongoose.connection.on('disconnected', function () {
+mongoose.connection.on('disconnected', () => {
 	console.log('Mongoose disconnected');
 });
 
 // CAPTURE APP TERMINATION/RESTART EVENT
-const gracefulShutdown = function (msg, callback) {
-	mongoose.connection.close(function () {
+const gracefulShutdown = (msg, callback) => {
+	mongoose.connection.close( () => {
 		console.log('Mongoose disconnected through ' + msg);
 		callback();
 	})
 }
 
 // nodemon restart
-process.once('SIGUSR2', function () {
-	gracefulShutdown('nodemon restart', function () {
+process.once('SIGUSR2', () => {
+	gracefulShutdown('nodemon restart', () => {
 		process.kill(process.pid, 'SIGUSR2');
 	});
 });
 
 // App termination
-process.on('SIGINT', function () {
-	gracefulShutdown('app termination', function () {
+process.on('SIGINT', () => {
+	gracefulShutdown('app termination', () => {
 		process.exit(0);
 	});
 });
 
 // Heroku app termination
-process.on('SIGTERM', function () {
-	gracefulShutdown('Heroku app shutdown', function () {
+process.on('SIGTERM', () => {
+	gracefulShutdown('Heroku app shutdown', () => {
 		process.exit(0);
 	});
 });
