@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 //Initialize MongoDB local
-const dbURI = 'mongodb://localhost/loc8r';
+let dbURI = 'mongodb://localhost/loc8r';
 
  // If in production mode, set connection string to production DB
 if (process.env.NODE_ENV  === 'production') {
