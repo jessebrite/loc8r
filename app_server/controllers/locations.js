@@ -44,10 +44,10 @@ module.exports.homelist = (req, res) => {
 		}
 	};
 	// Make a request to the given URL
-	request(requestOptions, (err, {statusCode}, body) => {
+	request(requestOptions, (err, response, body) => {
 		const data = body;
 		// Only loop if the status code is 200 and there is data
-		if (statusCode === 200 && data.length) {
+		if (response.statusCode === 200 && data.length) {
 			for (let i = 0; i < data.length; i++) {
 				data[i].distance = formatDistance(data[i].distance);
 			}
@@ -55,8 +55,8 @@ module.exports.homelist = (req, res) => {
 		// Trap every possible error
 		if (err) {
 			console.log(err)
-		} else if (statusCode !== 200) {
-				console.log(statusCode);
+		} else if (response.statusCode !== 200) {
+				console.log(response.statusCode);
 		}
 
 			// console.log(body)
@@ -117,18 +117,18 @@ module.exports.doAddReview = (req, res) => {
 	if (!postData.author || !postData.rating || !postData.reviewText) {
 		res.redirect(`/locations/${locationid}/review/new?err=val`);
 	} else {
-			request(requestOptions, (err, {statusCode}, body) => {
+			request(requestOptions, (err, response, body) => {
 				if (err) {
 					console.log(err)
 				} else if (statusCode === 400 && body.name && body.name === 'ValidationError') {
 					res.redirect(`/locations/${locationid}/review/new?err=val`);
-				} else if (statusCode !== 201) {
-					showError(req, res, statusCode);
-					console.log(statusCode);
+				} else if (response.statusCode !== 201) {
+					showError(req, res, response.statusCode);
+					console.log(response.statusCode);
 				} else {
 					res.redirect(`/locations/${locationid}`);
 					console.log('Review addition success');
-					console.log(`Location success: status code ${statusCode}`);
+					console.log(`Location success: status code ${response.statusCode}`);
 				}
 			});
 	}
@@ -142,14 +142,14 @@ const getLocationInfo = (req, res, callback) => {
 		json: {}
 	};
 
-	request(requestOptions, (err, {statusCode}, body) => {
+	request(requestOptions, (err, response, body) => {
     // renderHomepage(req, res, body);
 		let data = body;
 		if (err) {
 			console.log(err)
-		} else if (statusCode !== 200) {
-			showError(req, res, statusCode);
-			console.log(statusCode);
+		} else if (response.statusCode !== 200) {
+			showError(req, res, response.statusCode);
+			console.log(response.statusCode);
 		} else {
 			data.coords = {
 				lng: body.coords[0],
@@ -157,7 +157,7 @@ const getLocationInfo = (req, res, callback) => {
 			}
 			callback(req, res, data);
 			// console.log(data);
-			console.log(`Location success: status code ${statusCode}`);
+			console.log(`Location success: status code ${response.statusCode}`);
 		}
   });
 };
