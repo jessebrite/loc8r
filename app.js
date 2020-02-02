@@ -1,3 +1,4 @@
+// Imports
 const mongoose = require('mongoose');
 const createError = require('http-errors');
 const express = require('express');
@@ -14,18 +15,23 @@ const routesAPI = require('./app_api/routes/index');
 const app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'app_server', 'views'));
-app.set('view engine', 'pug');
+app
+  .set('views', path.join(__dirname, 'app_server', 'views'))
+  .set('view engine', 'pug');
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// Binding the imports
+app
+  .use(logger('dev'))
+  .use(express.json())
+  .use(express.urlencoded({ extended: false }))
+  .use(cookieParser())
+  .use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/api', routesAPI);
+// Routes
+app
+  .use('/', indexRouter)
+  .use('/users', usersRouter)
+  .use('/api', routesAPI);
 
 // catch 404 and forward to error handler
 app.use( (req, res, next) => {

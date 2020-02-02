@@ -4,13 +4,16 @@ const ctrlLocations = require('../controllers/locations');
 const ctrlOthers = require('../controllers/others');
 
 /* Locations pages */
-router.get('/', ctrlLocations.homelist);
-router.get('/locations/:locationid', ctrlLocations.locationInfo);
-router.get('/locations/:locationid/review/new', ctrlLocations.addReview);
-router.post('/locations/:locationid/review/new', ctrlLocations.doAddReview);
+router
+  .get('/', ctrlLocations.homelist)
+  .get('/locations/:locationid', ctrlLocations.locationInfo)
+  .get('/locations/:locationid/review/new', ctrlLocations.addReview)
+  .post('/locations/:locationid/review/new', ctrlLocations.doAddReview);
 
-/* Others page*/
-router.get('/generic-view', ctrlOthers.about);
-router.get('/contact', ctrlOthers.contact);
+/* Other pages*/
+router
+  .get('/generic-view', ctrlOthers.about)
+  .get('/contact', ctrlOthers.contact);
 
 module.exports = router;
+

@@ -14,14 +14,15 @@ block content
         .card
           .card-block
             h4
-              a(href=`/locations/${location._id}`)= location.name
+              a(href=`/locations/${location.id}`)= location.name
               small &nbsp;
                 +outputRating(location.rating)
-              span.badge.pull-right.badge-default= location.distance
+              span.badge.badge-pill.badge-default.float-right= location.distance
             p.address= location.address
             p
+            .facillities
               each facility in location.facilities
-                span.label.label-warning= facility
+                span.badge.badge-warning= facility
                 | &nbsp;
     .col-xs-12.col-sm-4
       p.lead= sidebar

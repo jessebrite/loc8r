@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'production') {
 
 /* Get 'home page' */
 const renderHomepage = (req, res, responseBody) => {
-  let message = '';
+  let message = null;
   if (!(responseBody instanceof Array)) {
     message = 'API lookup error';
     responseBody = [];
@@ -31,37 +31,35 @@ const renderHomepage = (req, res, responseBody) => {
 	});
 }
 
-module.exports.homelist = (req, res) => {
+
+const homelist = (req, res) => {
 	const path = '/api/locations';
 	const requestOptions = {
-		url: apiOptions.server + path,
+		url: `${apiOptions.server}${path}`,
 		method: 'GET',
 		json: {},
 		qs: {
-			lng: -0.12445156,
-			lat: 41.21529623,
-			// maxDistance: 2000
+      // The coordinates
+      lng: 0.01768181,
+      lat: 5.72360790,
+      // Uncomment to add the maximum vicinity/catchment area
+			// maxDistance: 200000
 		}
-	};
-	// Make a request to the given URL
-	request(requestOptions, (err, response, body) => {
-		const data = body;
-		// Only loop if the status code is 200 and there is data
-		if (response.statusCode === 200 && data.length) {
-			for (let i = 0; i < data.length; i++) {
-				data[i].distance = formatDistance(data[i].distance);
-			}
-		}
-		// Trap every possible error
-		if (err) {
-			console.log(err)
-		} else if (response.statusCode !== 200) {
-				console.log(response.statusCode);
-		}
+  };
 
-			// console.log(body)
-			renderHomepage(req, res, data);
-	});
+  request(
+          requestOptions,
+          (err, {statusCode}, body) => {
+            let data = [];
+            if (statusCode === 200 && body.length) {
+              data = body.map( (item) => {
+                item.distance = formatDistance(item.distance);
+                return item;
+              });
+            }
+            renderHomepage(req, res, data);
+          }
+        );
 }
 
 const renderDetailsPage = (req, res, locDetail) => {
@@ -78,8 +76,9 @@ const renderDetailsPage = (req, res, locDetail) => {
 	});
 }
 
+
 /* Get 'locations info' page */
-module.exports.locationInfo = (req, res) => {
+const locationInfo = (req, res) => {
   const path = `/api/locations/${req.params.locationid}`;
   const requestOptions = {
     url: `${apiOptions.server}${path}`,
@@ -93,13 +92,13 @@ module.exports.locationInfo = (req, res) => {
 };
 
 /* Get 'Add review' page*/
-module.exports.addReview = (req, res) => {
+const addReview = (req, res) => {
 	getLocationInfo(req, res, (req, res, responseData) => {
 		renderReviewForm(req, res, responseData);
 	});
 }
 
-module.exports.doAddReview = (req, res) => {
+const doAddReview = (req, res) => {
 	const locationid = req.params.locationid;
   const	path = `/api/locations/${locationid}/reviews`;
 	const postData = {
@@ -117,18 +116,18 @@ module.exports.doAddReview = (req, res) => {
 	if (!postData.author || !postData.rating || !postData.reviewText) {
 		res.redirect(`/locations/${locationid}/review/new?err=val`);
 	} else {
-			request(requestOptions, (err, response, body) => {
+			request(requestOptions, (err, {statusCode}, body) => {
 				if (err) {
 					console.log(err)
 				} else if (statusCode === 400 && body.name && body.name === 'ValidationError') {
 					res.redirect(`/locations/${locationid}/review/new?err=val`);
-				} else if (response.statusCode !== 201) {
-					showError(req, res, response.statusCode);
-					console.log(response.statusCode);
+				} else if (statusCode !== 201) {
+					showError(req, res, statusCode);
+					console.log(statusCode);
 				} else {
 					res.redirect(`/locations/${locationid}`);
 					console.log('Review addition success');
-					console.log(`Location success: status code ${response.statusCode}`);
+					console.log(`Location success: status code ${statusCode}`);
 				}
 			});
 	}
@@ -142,14 +141,14 @@ const getLocationInfo = (req, res, callback) => {
 		json: {}
 	};
 
-	request(requestOptions, (err, response, body) => {
+	request(requestOptions, (err, {statusCode}, body) => {
     // renderHomepage(req, res, body);
 		let data = body;
 		if (err) {
 			console.log(err)
-		} else if (response.statusCode !== 200) {
-			showError(req, res, response.statusCode);
-			console.log(response.statusCode);
+		} else if (statusCode !== 200) {
+			showError(req, res, statusCode);
+			console.log(statusCode);
 		} else {
 			data.coords = {
 				lng: body.coords[0],
@@ -157,7 +156,7 @@ const getLocationInfo = (req, res, callback) => {
 			}
 			callback(req, res, data);
 			// console.log(data);
-			console.log(`Location success: status code ${response.statusCode}`);
+			console.log(`Location success: status code ${statusCode}`);
 		}
   });
 };
@@ -180,8 +179,8 @@ const formatDistance = (distance) => {
     thisDistance = Math.floor(distance);
   }
   return thisDistance + unit;
-
 }
+
 
 const showError = (req, res, status) => {
   let title, content;
@@ -198,3 +197,14 @@ const showError = (req, res, status) => {
 		content: content
 	});
 }
+
+
+module.exports = {
+  homelist,
+  locationInfo,
+  addReview,
+  doAddReview
+};
+
+
+// From git

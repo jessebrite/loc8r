@@ -1,13 +1,13 @@
-var mongoose = require('mongoose');
-var Loc = mongoose.model('Location');
+const mongoose = require('mongoose');
+const Loc = mongoose.model('Location');
 
 // The POST method for review
-module.exports.reviewsCreate = function(req, res) {
-	var locationid = req.params.locationid;
+const reviewsCreate = (req, res) => {
+	const locationid = req.params.locationid;
 	if (req.params && locationid) {
 		Loc.findById(locationid)
 				.select('reviews')
-				.exec(function(err, location) {
+				.exec((err, location) => {
 					if (err) {
 						sendJsonResponse(res, 404, err);
 						console.log('Wrong locationid')
@@ -22,14 +22,13 @@ module.exports.reviewsCreate = function(req, res) {
 };
 
 // The GET method for review
-module.exports.reviewsReadOne = function(req, res) {
-	var locationid = req.params.locationid;
-	var reviewid = req.params.reviewid;
+const reviewsReadOne = (req, res) => {
+	const locationid = req.params.locationid;
+	const reviewid = req.params.reviewid;
 	if (req.params && locationid && reviewid) {
 		Loc.findById(locationid)
 				.select('name reviews')
-				.exec(function(err, location) {
-					var response, review;
+				.exec((err, location) => {;
 			if (!location) {
 				sendJsonResponse(res, 404, {'message' : 'Page not found'});
 				console.log('Page not found error');
@@ -39,7 +38,7 @@ module.exports.reviewsReadOne = function(req, res) {
 				return;
 			}
 			if (location.reviews && location.reviews.length > 0) {
-				review = location.reviews.id(reviewid);
+				const review = location.reviews.id(reviewid);
 				if (!review) {
 					sendJsonResponse(res, 404, {'message' : 'reviewid not found'});
 					console.log('reviewid not found');
@@ -66,19 +65,19 @@ module.exports.reviewsReadOne = function(req, res) {
 };
 
 // The UPDATE method for review
-module.exports.reviewsUpdateOne = function(req, res) {
-	var locationid = req.params.locationid,
+const reviewsUpdateOne = (req, res) => {
+	const locationid = req.params.locationid,
 				reviewid = req.params.reviewid;
 	if (req.params && locationid && reviewid) {
 		Loc.findById(locationid).select('reviews')
-				.exec(function(err, location) {
-					var thisReview = '';
+				.exec((err, location) => {
+					let thisReview = null;
 					if (!location) {
 						sendJsonResponse(res, 404, {'message': 'No locationid found'});
 					} else if (err) {
 						sendJsonResponse(res, 400, err);
 					}
-					var	reviews = location.reviews;
+					const	reviews = location.reviews;
 					if (reviews && reviews.length > 0) {
 						thisReview = reviews.id(reviewid);
 						if (!thisReview) {
@@ -89,11 +88,12 @@ module.exports.reviewsUpdateOne = function(req, res) {
 							thisReview.author = req.body.author;
 							thisReview.rating = req.body.rating;
 							thisReview.reviewText = req.body.reviewText;
-							location.save(function(err, location) {
+							location.save((err, location) => {
 								if (err) {
 									sendJsonResponse(res, 404, err);
 								} else {
-									updateAverageRating(location._id);
+                  updateAverageRating(location._id);
+                  console.log('Review update success');
 									sendJsonResponse(res, 200, thisReview);
 								}
 							});
@@ -109,27 +109,27 @@ module.exports.reviewsUpdateOne = function(req, res) {
 };
 
 // the DELETE method for review
-module.exports.reviewsDeleteOne = function(req, res) {
-	var locationid = req.params.locationid,
+const reviewsDeleteOne = function(req, res) {
+	const locationid = req.params.locationid,
 				reviewid = req.params.reviewid;
 	if (req.params && locationid && reviewid) {
 		Loc.findById(locationid).select('reviews')
-				.exec(function(err, location) {
-					var thisReview = '';
+				.exec( (err, location) => {
+					let thisReview = '';
 					if (!location) {
 						sendJsonResponse(res, 404, {'message': 'No location found'});
 						return;
 					} else if (err) {
 						sendJsonResponse(res, 404, err);
 					}
-					var reviews = location.reviews,
+					const reviews = location.reviews,
 						thisReview = reviews.id(reviewid);
 					if (reviews && reviews.length > 0) {
 						if (!thisReview) {
 							sendJsonResponse(res, 404, {'message': 'No reviewid found'});
 						} else {
 							location.reviews.id(reviewid).deleteOne();
-							location.save(function(err) {
+							location.save(err => {
 								if (err) {
 									sendJsonResponse(res, 404, err);
 								} else {
@@ -149,12 +149,12 @@ module.exports.reviewsDeleteOne = function(req, res) {
 };
 
 // json response function
-var sendJsonResponse = function(res, status, content) {
+const sendJsonResponse = (res, status, content) => {
 	res.status(status);
 	res.json(content);
 }
 
-var doAddReview = function(req, res, location) {
+const doAddReview = (req, res, location) => {
 	if (!location) { // thow a 404 error if location isn't found
 		sendJsonResponse(res, 404, {"message": "locationid not found"});
 	} else { // Add reviews
@@ -164,8 +164,8 @@ var doAddReview = function(req, res, location) {
 				reviewText: req.body.reviewText
 		});
 		// Persist the location
-		location.save(function(err, location) {
-			var thisReview;
+		location.save((err, location) => {
+			let thisReview = null;
 			if (err) {
 				sendJsonResponse(res, 400, err);
 				console.log('Error found')
@@ -182,10 +182,10 @@ var doAddReview = function(req, res, location) {
 }
 
 // Updates the rating
-var updateAverageRating = function(locationid) {
+const updateAverageRating = locationid => {
 	Loc.findById(locationid)
 			.select('rating reviews')
-			.exec(function(err, location) {
+			.exec((err, location) => {
 				if (err) {
 					sendJsonResponse(res, 404, err)
 				} else {
@@ -196,17 +196,17 @@ var updateAverageRating = function(locationid) {
 }
 
 // Calculates the average rating
-var doSetAverageRating = function(location) {
-	var i, reviewCount, ratingAverage, ratingTotal = 0;
-	var reviews = location.reviews;
+const doSetAverageRating = (location) => {
+	let  reviewCount = ratingAverage = ratingTotal = 0;
+	const reviews = location.reviews;
 	if (reviews && reviews.length > 0) {
 		reviewCount = reviews.length;
-		for (i = 0; i < reviewCount; i++) {
+		for (let i = 0; i < reviewCount; i++) {
 			ratingTotal = ratingTotal + reviews[i].rating;
 		}
 		ratingAverage = parseInt(ratingTotal / reviewCount, 10);
 		location.rating = ratingAverage;
-		location.save(function(err) {
+		location.save( err => {
 			if (err) {
 				console.log(err);
 			} else {
@@ -215,3 +215,10 @@ var doSetAverageRating = function(location) {
 		});
 	}
 }
+
+module.exports = {
+  reviewsReadOne,
+  reviewsCreate,
+  reviewsDeleteOne,
+  reviewsUpdateOne,
+};
