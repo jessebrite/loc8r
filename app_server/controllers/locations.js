@@ -40,7 +40,7 @@ const homelist = (req, res) => {
 		json: {},
 		qs: {
       // The coordinates
-      lng: 20.01768181,
+      lng: 0.01768181,
       lat: 5.72360790,
       // Uncomment to add the maximum vicinity/catchment area
 			maxDistance: 200
