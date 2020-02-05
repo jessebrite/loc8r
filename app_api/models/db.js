@@ -4,7 +4,6 @@ let dbURI = 'mongodb://localhost/loc8r';
 
  // If in production mode, set connection string to production DB
 if (process.env.NODE_ENV  === 'production') {
-
 	dbURI = process.env.MONGOdb_URL;
 }
 // DB CONNECTION
@@ -16,7 +15,7 @@ mongoose.connection.on('connected', () => {
 	console.log('Mongoose connected');
 });
 mongoose.connection.on('error', err => {
-	console.log('Mongoose connection error: ' + err);
+	console.log(`Mongoose connection error: ${err}`);
 });
 mongoose.connection.on('disconnected', () => {
 	console.log('Mongoose disconnected');

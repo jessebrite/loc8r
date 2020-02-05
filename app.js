@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const createError = require('http-errors');
 const express = require('express');
+const helmet = require('helmet');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -13,6 +14,9 @@ const usersRouter = require('./app_server/routes/users');
 const routesAPI = require('./app_api/routes/index');
 
 const app = express();
+
+// Sets appropirate HTTP headers to help against vulnerabilites
+app.use(helmet());
 
 // view engine setup
 app

@@ -1,9 +1,9 @@
 const request = require('request');
 // Set default server for the URL
-const apiOptions = { server: "http://localhost:3000" }
+const apiOptions = { server: 'http://localhost:3000' }
 // If in a production environment, use the live-hosted URL
 if (process.env.NODE_ENV === 'production') {
-	apiOptions.server = "https://boiling-stream-84042.herokuapp.com/";
+	apiOptions.server = 'https://boiling-stream-84042.herokuapp.com';
 }
 
 /* Get 'home page' */
@@ -43,7 +43,7 @@ const homelist = (req, res) => {
       lng: 0.01768181,
       lat: 5.72360790,
       // Uncomment to add the maximum vicinity/catchment area
-			// maxDistance: 200000
+			maxDistance: 200
 		}
   };
 
