@@ -7,6 +7,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const favicon = require('serve-favicon'); // Not using this feature currently
+require('dotenv').config();
 require('./app_api/models/db') // importing the DB
 
 const indexRouter = require('./app_server/routes/index');

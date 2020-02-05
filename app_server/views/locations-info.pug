@@ -50,7 +50,8 @@ block content
                       .col-12.no-gutters.review-header
                         span-rating
                           +outputRating(review.rating)
-                        span.reviewAuthor #{review.author}
+                          | &nbsp;
+                        span.reviewAuthor #{review.author.toUpperCase()} -&nbsp;
                         small.reviewTimestamp
                           +formatDate(review.createdOn)
                       .col-12

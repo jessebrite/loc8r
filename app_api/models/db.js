@@ -4,7 +4,7 @@ let dbURI = 'mongodb://localhost/loc8r';
 
  // If in production mode, set connection string to production DB
 if (process.env.NODE_ENV  === 'production') {
-	dbURI = process.env.MONGOdb_URL;
+	dbURI = process.env.MONGODB_URI;
 }
 // DB CONNECTION
 mongoose.connect(dbURI, { useCreateIndex: true,
