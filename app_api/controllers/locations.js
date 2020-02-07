@@ -66,7 +66,7 @@ const locationsCreate = (req, res) => {
 			closed: req.body.closed2
 		}],
 	},
-	function(err, location) {
+	(err, location) => {
 		if (err) {
 			sendJsonResponse(res, 404, err);
 		} else {

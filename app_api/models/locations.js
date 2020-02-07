@@ -6,16 +6,18 @@ const openingTimeSchema = new mongoose.Schema({
 	opening: {type: String, required: false},
 	closing: {type: String, required: false},
 	closed: {type: Boolean, required: true}
-}),
+});
+
 // REVIEW SCHEMA
-	reviewSchema = new mongoose.Schema({
+const	reviewSchema = new mongoose.Schema({
 	author: {type: String, required: true},
 	rating: {type: Number, required:true, min:0, max:5},
 	reviewText: {type: String, required: true},
 	createdOn: {type:Date, "default":Date.now}
-}),
+});
+
 //LOCATION SCHEMA
-	locationSchema = new mongoose.Schema({
+const	locationSchema = new mongoose.Schema({
 	name: {type: String, required: true},
 	address: String,
 	rating: {type: Number, "default": 0, min: 0, max: 5},

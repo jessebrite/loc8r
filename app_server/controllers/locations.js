@@ -52,7 +52,7 @@ const homelist = (req, res) => {
           (err, {statusCode}, body) => {
             let data = [];
             if (statusCode === 200 && body.length) {
-              data = body.map( (item) => {
+              data = body.map( item => {
                 item.distance = formatDistance(item.distance);
                 return item;
               });
@@ -86,7 +86,7 @@ const locationInfo = (req, res) => {
     json: {}
   };
 
-	getLocationInfo(req, res, function(req, res, responseData) {
+	getLocationInfo(req, res, (req, res, responseData) => {
 		renderDetailsPage(req, res, responseData);
   });
 };
