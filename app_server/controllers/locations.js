@@ -108,7 +108,7 @@ const doAddReview = (req, res) => {
 	}
 
 	const requestOptions = {
-		url: apiOptions.server + path,
+		url: `${apiOptions.server}${path}`,
 		method: 'POST',
 		json: postData
 	};
@@ -116,10 +116,10 @@ const doAddReview = (req, res) => {
 	if (!postData.author || !postData.rating || !postData.reviewText) {
 		res.redirect(`/locations/${locationid}/review/new?err=val`);
 	} else {
-			request(requestOptions, (err, {statusCode}, body) => {
+			request(requestOptions, (err, {statusCode}, {name}) => {
 				if (err) {
 					console.log(err)
-				} else if (statusCode === 400 && body.name && body.name === 'ValidationError') {
+				} else if (statusCode === 400 && name && name === 'ValidationError') {
 					res.redirect(`/locations/${locationid}/review/new?err=val`);
 				} else if (statusCode !== 201) {
 					showError(req, res, statusCode);
@@ -142,7 +142,6 @@ const getLocationInfo = (req, res, callback) => {
 	};
 
 	request(requestOptions, (err, {statusCode}, body) => {
-    // renderHomepage(req, res, body);
 		let data = body;
 		if (err) {
 			console.log(err)
@@ -161,10 +160,10 @@ const getLocationInfo = (req, res, callback) => {
   });
 };
 
-const renderReviewForm = (req, res, locDetail) => {
+const renderReviewForm = (req, res, {name}) => {
 	res.render('location-review-form', {
-		title: `Review ${locDetail.name} on Loc8r`,
-		pageHeader: {title: `Review ${locDetail.name}`},
+		title: `Review ${name} on Loc8r`,
+		pageHeader: {title: `Review ${name}`},
 		error: req.query.err
 	});
 }

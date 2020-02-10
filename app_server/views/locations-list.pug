@@ -10,7 +10,8 @@ block content
   .row
     .col-xs-12.col-sm-8
       .error= message
-      each location in locations
+      //- Intentionally left out to serve from angular
+      //- each location in locations
         .card
           .card-block
             h4
@@ -24,5 +25,7 @@ block content
               each facility in location.facilities
                 span.badge.badge-warning= facility
                 | &nbsp;
+      //- Serving page from angular
+      app-home-list
     .col-xs-12.col-sm-4
       p.lead= sidebar
