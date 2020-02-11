@@ -1,0 +1,24 @@
+<nav class="navbar sticky-top navbar-expand-lg navbar-light">
+  <div class="container">
+    <a routerLinkActive="active" (click)="toggleNavbar()" class="navbar-brand" [routerLink]="['/']">Loc8r</a>
+    <button class="navbar-toggler" type="button" (click)="toggleNavbar()" data-toggle="collapse"
+      data-target="#navbarNav" aria-controls="#navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" [ngClass]="{'show': navbarOpen}" id="navbarNavAltMarkup">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a routerLinkActive="active" (click)="toggleNavbar()" class="nav-link" [routerLink]="['/about']">About</a></li>
+        <li class="nav-item"><a routerLinkActive="active" (click)="toggleNavbar()" class="nav-link" [routerLink]="['/contact']">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container content">
+  <router-outlet></router-outlet>
+  <footer>
+    <div class="row">
+        <div class="col-xs-12"><small>&copy;Jessebrite - {{date}}</small>
+        </div>
+    </div>
+  </footer>
+</div>

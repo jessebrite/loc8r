@@ -13,10 +13,10 @@ constructor(private http: HttpClient) { }
 private apiBaseUrl = 'http://localhost:3000/api';
 
 public getLocations(): Promise<Location[]> {
-  const lng: number = 0.01768181;
-  const lat: number = 5.7236079;
-  const maxDistance: number = 200;
-  const url: string = `${this.apiBaseUrl}/locations?lng=${lng}&lat=${lat}&maxDistance=${maxDistance}`;
+  const lng = 0.01768181;
+  const lat = 5.7236079;
+  const maxDistance = 200;
+  const url = `${this.apiBaseUrl}/locations?lng=${lng}&lat=${lat}&maxDistance=${maxDistance}`;
   return this.http
     .get(url)
     .toPromise()
