@@ -1,4 +1,5 @@
-<div class="card" *ngFor="let location of locations">
+    <div class="error">{{message}}</div>
+    <div class="card" *ngFor="let location of locations">
   <div class="card-block">
     <h4>
       <a href="/locations/{{ location.id }}">{{location.name}}</a>

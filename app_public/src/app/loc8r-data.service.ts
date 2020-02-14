@@ -12,9 +12,9 @@ constructor(private http: HttpClient) { }
 
 private apiBaseUrl = 'http://localhost:3000/api';
 
-public getLocations(): Promise<Location[]> {
-  const lng = 0.01768181;
-  const lat = 5.7236079;
+public getLocations(lat: number, lng: number): Promise<Location[]> {
+  // const lng = 0.01768181;
+  // const lat = 5.7236079;
   const maxDistance = 200;
   const url = `${this.apiBaseUrl}/locations?lng=${lng}&lat=${lat}&maxDistance=${maxDistance}`;
   return this.http
@@ -25,7 +25,7 @@ public getLocations(): Promise<Location[]> {
 }
 
 private handleErrors(error: any): Promise<any> {
-  console.error('Something has gone wrong, error');
+  console.error('Something has gone wrong', error);
   return Promise.reject(error.message || error);
 }
 
