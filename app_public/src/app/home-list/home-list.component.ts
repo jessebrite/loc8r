@@ -4,12 +4,15 @@ import { GeolocationService } from '../geolocation.service';
 
 export class Location {
   // tslint:disable-next-line: variable-name
-  id: string;
+  _id: string;
   name: string;
   distance: number;
   address: string;
   rating: number;
+  coords: number[];
   facilities: string[];
+  reviews: any[];
+  openingTimes: any[];
 }
 
 @Component({

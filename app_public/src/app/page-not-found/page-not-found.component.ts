@@ -9,6 +9,14 @@ export class PageNotFoundComponent implements OnInit {
 
   constructor() { }
 
+  public pageContent = {
+    header: {
+      title: 'Page not found',
+      strapline: ''
+    },
+    content: 'Sorry, but this page cannot be found'
+  };
+
   ngOnInit() {
   }
 

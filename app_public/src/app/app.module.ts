@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { HomeListComponent } from './home-list/home-list.component';
 import { DistancePipe } from './distance.pipe';
@@ -14,6 +15,10 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HtmlLineBreaksPipe } from './html-line-breaks.pipe';
 import { RatingStarsComponent } from './rating-stars/rating-stars.component';
+import { LocationDetailsComponent } from './location-details/location-details.component';
+import { DetailsPageComponent } from './details-page/details-page.component';
+import { MostRecentFirstPipe } from './most-recent-first.pipe';
+// import { APP_BASE_HREF } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -28,13 +33,20 @@ import { RatingStarsComponent } from './rating-stars/rating-stars.component';
     SidebarComponent,
     HtmlLineBreaksPipe,
     RatingStarsComponent,
+    LocationDetailsComponent,
+    DetailsPageComponent,
+    MostRecentFirstPipe,
    ],
    imports: [
       BrowserModule,
       HttpClientModule,
-      AppRoutingModule
+      AppRoutingModule,
+      FormsModule,
+      ReactiveFormsModule
    ],
-   providers: [],
+   providers: [
+    // {provide: APP_BASE_HREF, useValue : '/' }
+   ],
    bootstrap: [
       FrameworkComponent
    ]
