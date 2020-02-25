@@ -27,8 +27,8 @@ const reviewsReadOne = (req, res) => {
 	const reviewid = req.params.reviewid;
 	if (req.params && locationid && reviewid) {
 		Loc.findById(locationid)
-				.select('name reviews')
-				.exec((err, location) => {;
+				.select('name reviews').limit(0)
+				.exec((err, location) => {
 			if (!location) {
 				sendJsonResponse(res, 404, {'message' : 'Page not found'});
 				console.log('Page not found error');
@@ -115,7 +115,6 @@ const reviewsDeleteOne = function(req, res) {
 	if (req.params && locationid && reviewid) {
 		Loc.findById(locationid).select('reviews')
 				.exec( (err, location) => {
-					let thisReview = '';
 					if (!location) {
 						sendJsonResponse(res, 404, {'message': 'No location found'});
 						return;
@@ -128,7 +127,7 @@ const reviewsDeleteOne = function(req, res) {
 						if (!thisReview) {
 							sendJsonResponse(res, 404, {'message': 'No reviewid found'});
 						} else {
-							location.reviews.id(reviewid).deleteOne();
+							location.reviews.id(reviewid).remove();
 							location.save(err => {
 								if (err) {
 									sendJsonResponse(res, 404, err);

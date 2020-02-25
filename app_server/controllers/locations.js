@@ -42,7 +42,7 @@ const homelist = (req, res) => {
       // The coordinates
       lng: 0.01768181,
       lat: 5.72360790,
-      // Uncomment to add the maximum vicinity/catchment area
+      // vicinity/catchment area
 			maxDistance: 200
 		}
   };
@@ -51,13 +51,18 @@ const homelist = (req, res) => {
           requestOptions,
           (err, {statusCode}, body) => {
             let data = [];
-            if (statusCode === 200 && body.length) {
-              data = body.map( item => {
-                item.distance = formatDistance(item.distance);
-                return item;
-              });
+            if (err) {
+              console.log('Ther was an error ', err);
+            } else if (statusCode === 200 && body.length) {
+                data = body.map( item => {
+                  item.distance = formatDistance(item.distance);
+                  return item;
+                });
+              renderHomepage(req, res, data);
+            } else if (statusCode !== 200 || !body.length) {
+              showError(req, res, statusCode);
+              console.log(statusCode);
             }
-            renderHomepage(req, res, data);
           }
         );
 }

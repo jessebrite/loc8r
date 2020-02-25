@@ -10,7 +10,7 @@ const favicon = require('serve-favicon'); // Not using this feature currently
 require('dotenv').config();
 require('./app_api/models/db') // importing the DB
 
-const indexRouter = require('./app_server/routes/index');
+// const indexRouter = require('./app_server/routes/index');
 const usersRouter = require('./app_server/routes/users');
 const routesAPI = require('./app_api/routes/index');
 
@@ -31,7 +31,7 @@ app
   .use(express.urlencoded({ extended: false }))
   .use(cookieParser())
   .use(express.static(path.join(__dirname, 'public')))
-  .use(express.static(path.join(__dirname, 'app_public')));
+  .use(express.static(path.join(__dirname, 'app_public', 'build')));
 
 // Allowing CORS
 app.use('/api', (req, res, next) => {
@@ -43,7 +43,7 @@ res
 
 // Routes
 app
-  .use('/', indexRouter)
+  // .use('/', indexRouter)
   .use('/users', usersRouter)
   .use('/api', routesAPI);
 

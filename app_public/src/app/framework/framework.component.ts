@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 export class FrameworkComponent implements OnInit {
   navbarOpen = false;
 
-  constructor(private route: Router) { }
+  constructor() { }
 
   date = new Date().getFullYear();
 

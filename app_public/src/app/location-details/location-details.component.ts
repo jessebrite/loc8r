@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Location } from '../home-list/home-list.component';
+import { Location, Review } from '../location';
 import { Loc8rDataService } from '../loc8r-data.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class LocationDetailsComponent implements OnInit {
   public formVisible = false;
   public formError: string;
 
-  public newReview = {
+  public newReview: Review = {
     author: '',
     rating: 5,
     reviewText: ''
@@ -32,7 +32,7 @@ export class LocationDetailsComponent implements OnInit {
     }
   }
 
-  private resetandHideReviewforms(): void {
+  private resetAndHideReviewforms(): void {
     this.formVisible = false;
     this.newReview.author = '';
     this.newReview.rating = 5;
@@ -43,16 +43,16 @@ export class LocationDetailsComponent implements OnInit {
     this.formError = '';
     if (this.formIsValid()) {
       this.loc8rDataService.addReviewByLocationId(this.location._id, this.newReview)
-      .then(review => {
+      .then((review: Review) => {
         console.log('review saved', review);
         console.log(this.newReview);
         const reviews = this.location.reviews.slice(0);
         reviews.unshift(review);
         this.location.reviews = reviews;
-        this.resetandHideReviewforms();
+        this.resetAndHideReviewforms();
       });
     } else {
-      this.formError = 'All forms are required, please try again';
+      this.formError = 'All fields are required, please try again';
     }
   }
 

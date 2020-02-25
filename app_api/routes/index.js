@@ -16,6 +16,6 @@ router
   .post('/locations/:locationid/reviews', ctrlReviews.reviewsCreate)
   .get('/locations/:locationid/reviews/:reviewid', ctrlReviews.reviewsReadOne)
   .put('/locations/:locationid/reviews/:reviewid', ctrlReviews.reviewsUpdateOne)
-  .delete('/locations/:locationid/:reviews/:reviewid', ctrlReviews.reviewsDeleteOne);
+  .delete('/locations/:locationid/reviews/:reviewid', ctrlReviews.reviewsDeleteOne);
 
 module.exports = router;
