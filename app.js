@@ -46,6 +46,9 @@ app
   // .use('/', indexRouter)
   .use('/users', usersRouter)
   .use('/api', routesAPI);
+  app.get('*', function(req, res, next) {
+    res.sendFile(path.join(__dirname, 'app_public', 'build', 'index.html'));
+  });
 
 // catch 404 and forward to error handler
 app.use( (req, res, next) => {
