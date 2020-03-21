@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Loc = mongoose.model('Location');
 
+// Pagination
+const paginate = require('jw-paginate');
+
 const locationsListByDistance = async (req, res) => {
   const lng = parseFloat(req.query.lng);
 	const lat = parseFloat(req.query.lat);
@@ -38,7 +41,7 @@ const locationsListByDistance = async (req, res) => {
         address: result.address,
         rating: result.rating,
         facilities: result.facilities,
-        distance: `${result.distance.calculated.toFixed()}`
+        distance: `${result.distance.calculated.toFixed(2)}`
       }
     });
   sendJsonResponse(res, 200, locations);
@@ -46,6 +49,29 @@ const locationsListByDistance = async (req, res) => {
     console.error(err)
   };
 
+  /****************************************
+    Pagination starts here
+  ***************************************
+  */
+ // example array of 150 items to be paged
+  // const items = [...Array(150).keys()].map(i => ({ id: (i + 1), name: 'Item ' + (i + 1) }));
+
+  // // get page from query params or default to first page
+  // const page = parseInt(req.query.page) || 1;
+
+  // // get pager object for specified page
+  // const pager = paginate(items.length, page);
+
+  // // get page of items from items array
+  // const pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
+
+  // // return pager object and current page of items
+  // return res.json({ pager, pageOfItems });
+
+  /****************************************
+    Pagination ends here
+  ***************************************
+  */
 };
 
 const locationsCreate = (req, res) => {
@@ -56,9 +82,9 @@ const locationsCreate = (req, res) => {
 		coords: [parseFloat(req.body.lng), parseFloat(req.body.lat)],
 		openingTimes: [{
 			days: req.body.days1,
-			opening: req.body.opening2,
-			closing: req.body.closing2,
-			closed: req.body.closed2
+			opening: req.body.opening1,
+			closing: req.body.closing1,
+			closed: req.body.closed1
 		}, {
 			days: req.body.days2,
 			opening: req.body.opening2,

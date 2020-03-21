@@ -7,7 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContactComponent implements OnInit {
 
-  title = 'Contact';
+  public pageContent = {
+    header: {
+      title: 'Contact',
+      strapline: ''
+    },
+    content: 'Contact will be provided soon'
+  };
 
   constructor() { }
 

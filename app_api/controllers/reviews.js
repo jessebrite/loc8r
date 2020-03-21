@@ -1,24 +1,48 @@
 const mongoose = require('mongoose');
 const Loc = mongoose.model('Location');
+const User = mongoose.model('User');
+
+// The getAuthor function retrieves the email user details
+const getAuthor = ((req, res, callback) => {
+  if (req.payload && req.payload.email) {
+    User
+       .findOne({email: req.payload.email})
+       .exec((err, user) => {
+                if (err) {
+                  console.log('There was an error', err);
+                  sendJsonResponse(res, 404, err);
+                } else if (!user) {
+                  console.log('User does not exist');
+                  sendJsonResponse(res, 400, {'message': 'User does not exist'});
+                }
+                callback(req, res, user.name);
+              });
+  } else {
+    sendJsonResponse(res, 404, {'message': 'User not found'});
+  }
+});
 
 // The POST method for review
 const reviewsCreate = (req, res) => {
-	const locationid = req.params.locationid;
-	if (req.params && locationid) {
-		Loc.findById(locationid)
-				.select('reviews')
-				.exec((err, location) => {
-					if (err) {
-						sendJsonResponse(res, 404, err);
-						console.log('Wrong locationid')
-					} else {
-						// Call the doAddReview function
-						doAddReview(req, res, location);
-					}
-				});
-	} else {
-		sendJsonResponse(res, 404, {"message": "Not found. locationid required"});
-	}
+  getAuthor(req, res,
+    (req, res, userName) => {
+      const locationid = req.params.locationid;
+      if (req.params && locationid) {
+        Loc.findById(locationid)
+            .select('reviews')
+            .exec((err, location) => {
+              if (err) {
+                sendJsonResponse(res, 404, err);
+                console.log('Wrong locationid')
+              } else {
+                // Call the doAddReview function
+                doAddReview(req, res, location);
+              }
+            });
+      } else {
+        sendJsonResponse(res, 404, {"message": "Not found. locationid required"});
+      }
+    });
 };
 
 // The GET method for review
@@ -34,14 +58,14 @@ const reviewsReadOne = (req, res) => {
 				console.log('Page not found error');
 				return;
 			} else if (err) {
-				sendJsonResponse(res, 404, err);
+				sendJsonResponse(res, 400, err);
 				return;
 			}
 			if (location.reviews && location.reviews.length > 0) {
 				const review = location.reviews.id(reviewid);
 				if (!review) {
+          console.log('reviewid not found');
 					sendJsonResponse(res, 404, {'message' : 'reviewid not found'});
-					console.log('reviewid not found');
 				} else {
 					response = {
 						location: {
@@ -153,7 +177,7 @@ const sendJsonResponse = (res, status, content) => {
 	res.json(content);
 }
 
-const doAddReview = (req, res, location) => {
+const doAddReview = (req, res, location, author) => {
 	if (!location) { // thow a 404 error if location isn't found
 		sendJsonResponse(res, 404, {"message": "locationid not found"});
 	} else { // Add reviews

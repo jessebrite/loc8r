@@ -14,7 +14,29 @@
     </h4>
     <p class="address">{{location.address}}</p>
     <div class="facilities">
-      <span *ngFor="let facility of location.facilities" class="badge badge-warning" >{{facility}}</span>
+      <span *ngFor="let facility of location.facilities" class="badge badge-warning" >{{facility | titlecase}}</span>
     </div>
   </div>
 </div>
+<div class="card-body">
+  <div *ngFor="let item of pageOfItems">{{item.name}}</div>
+</div>
+<!-- <div class="card-footer pb-0 pt-3">
+  <ul *ngIf="pager " class="pagination">
+      <li [ngClass]="{disabled:pager.currentPage === 1}" class="page-item first-item">
+          <a routerLink [queryParams]="{ page: 1 }" class="page-link">First</a>
+      </li>
+      <li [ngClass]="{disabled:pager.currentPage === 1}" class="page-item previous-item">
+          <a routerLink [queryParams]="{ page: pager.currentPage - 1 }" class="page-link">Previous</a>
+      </li>
+      <li *ngFor="let page of pager" [ngClass]="{active:pager.currentPage === page}" class="page-item number-item">
+          <a routerLink [queryParams]="{ page: page }" class="page-link">{{page}}</a>
+      </li>
+      <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}" class="page-item next-item">
+          <a routerLink [queryParams]="{ page: pager.currentPage + 1 }" class="page-link">Next</a>
+      </li>
+      <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}" class="page-item last-item">
+          <a routerLink [queryParams]="{ page: pager.totalPages }" class="page-link">Last</a>
+      </li>
+  </ul>
+</div> -->
