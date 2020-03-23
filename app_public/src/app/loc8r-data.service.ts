@@ -17,6 +17,11 @@ export class Loc8rDataService {
 
   private apiBaseUrl = environment.apiBaseUrl;
 
+  private handleErrors(error: any): Promise<any> {
+    console.error('Something has gone wrong', error.error);
+    return Promise.reject(error.error.message); // Message is trapped in the error object
+  }
+
   public getLocations(lat: number, lng: number): Promise<Location[]> {
     // const lng = 0.01768181;
     // const lat = 5.7236079;
@@ -41,11 +46,6 @@ export class Loc8rDataService {
       .toPromise()
       .then(response => response as Location)
       .catch(this.handleErrors);
-  }
-
-  private handleErrors(error: any): Promise<any> {
-    console.error('Something has gone wrong', error);
-    return Promise.reject(error.message || error);
   }
 
   public addReviewByLocationId(locationid: string, formData: Review): Promise<Review> {

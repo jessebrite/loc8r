@@ -84,7 +84,7 @@
         <div *ngFor="let review of location.reviews | mostRecentFirst" class="row review">
           <div class="col-12 no-gutters review-header">
             <app-rating-stars [rating]="review.rating"></app-rating-stars> &nbsp;
-            <span class="reviewAuthor">{{ review.author }}</span> -&nbsp;
+            <span class="reviewAuthor">{{ review.author | titlecase }}</span> -&nbsp;
             <small class="reviewTimestamp">{{ review.createdOn | date: 'EEE, d MMMM, yyyy' }}</small>
           </div>
           <div class="col-12">
