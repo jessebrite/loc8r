@@ -1,6 +1,5 @@
 // Imports
 require('dotenv').config();
-// const mongoose = require('mongoose');
 const createError = require('http-errors');
 const express = require('express');
 const helmet = require('helmet');

@@ -12,7 +12,6 @@ const getAuthor = ((req, res, callback) => {
                   console.log('There was an error', err);
                   sendJsonResponse(res, 404, err);
                 } else if (!user) {
-                  console.log('User does not exist');
                   sendJsonResponse(res, 400, {'message': 'User does not exist'});
                 }
                 callback(req, res, user.name);
@@ -131,6 +130,7 @@ const reviewsUpdateOne = (req, res) => {
 		console.log('location and reviewid are both required');
 	}
 };
+
 
 // the DELETE method for review
 const reviewsDeleteOne = function(req, res) {

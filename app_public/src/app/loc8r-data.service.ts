@@ -18,8 +18,7 @@ export class Loc8rDataService {
   private apiBaseUrl = environment.apiBaseUrl;
 
   private handleErrors(error: any): Promise<any> {
-    console.error('Something has gone wrong', error.error);
-    return Promise.reject(error.error.message); // Message is trapped in the error object
+    return Promise.reject(error.error.message); // Message is captured in the error object
   }
 
   public getLocations(lat: number, lng: number): Promise<Location[]> {

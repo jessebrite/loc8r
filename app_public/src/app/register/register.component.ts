@@ -27,14 +27,14 @@ export class RegisterComponent implements OnInit {
       sidebar: ''
   };
 
-  constructor(private router: Router,
-              private authenticationService: AuthenticationService,
-              private historyService: HistoryService) { }
+  constructor(
+    private router: Router,
+    private authenticationService: AuthenticationService,
+    private historyService: HistoryService) { }
 
   public onRegisterSubmit(): void {
     this.formError = '';
     if (!this.credentials.name || !this.credentials.email || !this.credentials.password) {
-      console.log('Yawa pae');
       this.formError = 'All fields are required, please try again';
     } else {
       this.doRegister();

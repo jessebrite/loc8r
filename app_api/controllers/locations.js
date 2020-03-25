@@ -1,8 +1,6 @@
+
 const mongoose = require('mongoose');
 const Loc = mongoose.model('Location');
-
-// Pagination
-const paginate = require('jw-paginate');
 
 const locationsListByDistance = async (req, res) => {
   const lng = parseFloat(req.query.lng);
@@ -48,63 +46,42 @@ const locationsListByDistance = async (req, res) => {
   } catch(err) {
     console.error(err)
   };
-
-  /****************************************
-    Pagination starts here
-  ***************************************
-  */
- // example array of 150 items to be paged
-  // const items = [...Array(150).keys()].map(i => ({ id: (i + 1), name: 'Item ' + (i + 1) }));
-
-  // // get page from query params or default to first page
-  // const page = parseInt(req.query.page) || 1;
-
-  // // get pager object for specified page
-  // const pager = paginate(items.length, page);
-
-  // // get page of items from items array
-  // const pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
-
-  // // return pager object and current page of items
-  // return res.json({ pager, pageOfItems });
-
-  /****************************************
-    Pagination ends here
-  ***************************************
-  */
 };
 
 const locationsCreate = (req, res) => {
+  const { name, address, facilities, lng, lat, days1, opening1, closing1,
+          closed1, days2, opening2, closing2, closed2 } = req.body;
 	Loc.create({
-		name: req.body.name,
-		address: req.body.address,
-		facilities: req.body.facilities.split(','),
-		coords: [parseFloat(req.body.lng), parseFloat(req.body.lat)],
+		name: name,
+		address: address,
+		facilities: facilities.split(','), // Facilites should always have values for Postman feedback
+		coords: [parseFloat(lng), parseFloat(lat)],
 		openingTimes: [{
-			days: req.body.days1,
-			opening: req.body.opening1,
-			closing: req.body.closing1,
-			closed: req.body.closed1
-		}, {
-			days: req.body.days2,
-			opening: req.body.opening2,
-			closing: req.body.closing2,
-			closed: req.body.closed2
+			days: days1,
+			opening: opening1,
+			closing: closing1,
+			closed: closed1
+		},{
+			days: days2,
+      opening: opening2,
+      closing: closing2,
+      closed: closed2
 		}],
 	},
 	(err, location) => {
-		if (err) {
-			sendJsonResponse(res, 404, err);
-		} else {
-			sendJsonResponse(res, 201, location);
-			console.log('Location creation success');
+		if (err) { return sendJsonResponse(res, 404, err); }
+    else if (!location) {
+			return sendJsonResponse(res, 201, {message: "Error creating location"});
 		}
+    console.log('Location creation success');
+    return sendJsonResponse(res, 201, location);
 	});
 };
 
 const locationsReadOne = (req, res) => {
-	if (req.params && req.params.locationid) {
-    Loc.findById(req.params.locationid)
+  const locationid = req.params.locationid;
+	if (req.params && locationid) {
+    Loc.findById(locationid)
       .exec( (err, location) => {
         if (!location) {
           sendJsonResponse(res, 404, {'message' : 'Page not found'});
@@ -123,48 +100,40 @@ const locationsReadOne = (req, res) => {
 	}
 };
 
-const locationsUpdateOne = (req, res) => {
-	const locationid = req.params.locationid;
-	if (req.params && locationid) {
-		Loc.findById(locationid).select('-reviews -rating')
-			.exec( (err, location) => {
-				if (!location) {
-					sendJsonResponse(res, 404, {'message': 'location was not found'});
-				} else if (err) {
-					sendJsonResponse(res, 400, err);
-					return;
-				}
-					location.name = req.body.name;
-					location.address = req.body.address;
-					location.facilities = req.body.facilities.trim().split(', ');
-					location.coords = [parseFloat(req.body.lng), parseFloat(req.body.lat)];
-					location.openingTimes = [{
-						days: req.body.days1,
-						opening: req.body.opening1,
-						closing: req.body.closing1,
-						closed: req.body.closed1
-					},
-					{
-						days: req.body.days1,
-						opening: req.body.opening2,
-						closing: req.body.closing2,
-						closed: req.body.closed2
-					}]
-						location.save( (err, location) => {
-					if (err) {
-						sendJsonResponse(res, 404, err);
-					} else {
-						sendJsonResponse(res, 200, location);
-						console.log('Update success');
-					}
-				});
-		});
-
-	} else {
-		sendJsonResponse(res, 404, {'message': 'Not found. locationid is required'});
-		console.log('locationid not found');
-	}
-};
+const locationsUpdateOne = async (req, res) => {
+  const locationid = req.params.locationid;
+  const { name, address, facilities, lng, lat, days1, opening1, closing1,
+          closed1, days2, opening2, closing2, closed2 } = req.body;
+  const queryText = {
+    name, address,
+    coords: [parseFloat(lng), parseFloat(lat)],
+    facilities: facilities.split(','),
+    openingTimes: [{
+      days: days1,
+      opening: opening1,
+      closing: closing1,
+      closed: closed1
+    },
+    {
+      days: days2,
+      opening: opening2,
+      closing: closing2,
+      closed: closed2
+    }]
+  };
+  try {
+      const locUpdate = await Loc.findByIdAndUpdate(locationid, queryText);
+      if (locUpdate !== null) {
+        console.log('E source');
+        return sendJsonResponse(res, 200, locUpdate);
+      }
+      console.log('Update yawa!');
+      return sendJsonResponse(res, 404, {message: 'Location ID not found'});
+  } catch (error) {
+    console.log(error)
+    sendJsonResponse(res, 404, error)
+  }
+}
 
 const locationsDeleteOne = (req, res) => {
 	const locationid = req.params.locationid;

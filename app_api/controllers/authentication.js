@@ -3,24 +3,24 @@ const mongoose = require('mongoose');
 const User =  mongoose.model('User');
 
 const register = async (req, res) => {
-  if (!req.body.name || !req.body.email || !req.body.password) {
-    return sendJsonResponse(res, 404, {message: 'All fields are required'});
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    return sendJsonResponse(res, 404, { message: 'All fields are required, please try again' });
   }
 
   let existingUser = await User.findOne({
-      email: req.body.email
+      email
   });
   if (existingUser) {
-    // return sendJsonResponse(res, 404, {'message': 'User already exists'});
-    return res.status(404).json({message: 'email already exists. Please select a new one'});
+    return sendJsonResponse(res, 404, { message: 'email already exists. Please choose a new one' });
   }
 
   const user = new User();
-  user.name = req.body.name;
-  user.email = req.body.email;
-  user.setPassword(req.body.password);
+  user.name = name;
+  user.email = email;
+  user.setPassword(password);
   user.save( err => {
-    if (err) { sendJsonResponse(res, 404, {message: 'There was an error'}) }
+    if (err) { sendJsonResponse(res, 404, { message: 'There was an error' }) }
     else {
       const token = user.generateJwt();
       sendJsonResponse(res, 200, {token});
@@ -29,9 +29,9 @@ const register = async (req, res) => {
 }
 
 const login = (req, res) => {
-  if (!req.body.email || !req.body.password) {
-    // console.log('All fields required', err);
-    return sendJsonResponse(res, 404, {message: 'All fields are required'});
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return sendJsonResponse(res, 404, { message: 'All fields are required, please try again' });
   }
   passport.authenticate('local', (err, user, info) => {
     // let token;
@@ -46,11 +46,7 @@ const login = (req, res) => {
 }
 
 // json resonse function
-const sendJsonResponse = (res, status, content) => {
-  res
-    .status(status)
-    .json(content);
-}
+const sendJsonResponse = (res, status, content) => { res.status(status).json(content); }
 
 module.exports = {
   register,

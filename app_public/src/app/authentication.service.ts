@@ -9,8 +9,9 @@ import { AuthResponse } from './auth-response';
 })
 export class AuthenticationService {
 
-  constructor(@Inject(BROWSER_STORAGE) private storage: Storage,
-              private loc8rDateService: Loc8rDataService) { }
+  constructor(
+    @Inject(BROWSER_STORAGE) private storage: Storage,
+    private loc8rDateService: Loc8rDataService) { }
 
   public getToken(): string {
     return this.storage.getItem('loc8r-token');
