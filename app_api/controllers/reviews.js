@@ -6,16 +6,16 @@ const User = mongoose.model('User');
 const getAuthor = ((req, res, callback) => {
   if (req.payload && req.payload.email) {
     User
-       .findOne({email: req.payload.email})
-       .exec((err, user) => {
-                if (err) {
-                  console.log('There was an error', err);
-                  sendJsonResponse(res, 404, err);
-                } else if (!user) {
-                  sendJsonResponse(res, 400, {'message': 'User does not exist'});
-                }
-                callback(req, res, user.name);
-              });
+      .findOne({email: req.payload.email})
+      .exec((err, user) => {
+        if (err) {
+          console.log('There was an error', err);
+          sendJsonResponse(res, 404, err);
+        } else if (!user) {
+          sendJsonResponse(res, 400, {'message': 'User does not exist'});
+        }
+        callback(req, res, user.name);
+      });
   } else {
     sendJsonResponse(res, 404, {'message': 'User not found'});
   }
@@ -31,8 +31,8 @@ const reviewsCreate = (req, res) => {
             .select('reviews')
             .exec((err, location) => {
               if (err) {
-                sendJsonResponse(res, 404, err);
-                console.log('Wrong locationid')
+                console.log('Wrong locationid');
+                return sendJsonResponse(res, 404, err);
               } else {
                 // Call the doAddReview function
                 doAddReview(req, res, location);
@@ -59,8 +59,7 @@ const reviewsReadOne = (req, res) => {
 			} else if (err) {
 				sendJsonResponse(res, 400, err);
 				return;
-			}
-			if (location.reviews && location.reviews.length > 0) {
+			} else if (location.reviews && location.reviews.length > 0) {
 				const review = location.reviews.id(reviewid);
 				if (!review) {
           console.log('reviewid not found');
@@ -73,8 +72,8 @@ const reviewsReadOne = (req, res) => {
 						},
 						review: review
 					};
+          console.log('Page success');
 					sendJsonResponse(res, 200, response);
-					console.log('Page success');
 				}
 			} else {
 				sendJsonResponse(res, 404, {'message' : 'No review found'});
@@ -84,6 +83,7 @@ const reviewsReadOne = (req, res) => {
 	} else {
 			sendJsonResponse(res, 404, {'message' : 'locationid and reviewid are both required'});
 			console.log('No locationid requested');
+      return;
 	}
 };
 
@@ -210,7 +210,7 @@ const updateAverageRating = locationid => {
 			.select('rating reviews')
 			.exec((err, location) => {
 				if (err) {
-					sendJsonResponse(res, 404, err)
+					sendJsonResponse(res, 404, err);
 				} else {
 					// Call the doSetAverageRating function
 					doSetAverageRating(location);
@@ -232,6 +232,7 @@ const doSetAverageRating = (location) => {
 		location.save( err => {
 			if (err) {
 				console.log(err);
+        sendJsonResponse(res, 404, err);
 			} else {
 				console.log("Average rating updated to", ratingAverage);
 			}

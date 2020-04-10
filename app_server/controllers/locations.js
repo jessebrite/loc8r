@@ -47,30 +47,27 @@ const homelist = (req, res) => {
 		}
   };
 
-  request(
-          requestOptions,
-          (err, {statusCode}, body) => {
-            let data = [];
-            if (err) {
-              console.log('Ther was an error ', err);
-            } else if (statusCode === 200 && body.length) {
-                data = body.map( item => {
-                  item.distance = formatDistance(item.distance);
-                  return item;
-                });
-              renderHomepage(req, res, data);
-            } else if (statusCode !== 200 || !body.length) {
-              showError(req, res, statusCode);
-              console.log(statusCode);
-            }
-          }
-        );
+  request( requestOptions, (err, {statusCode}, body) => {
+    let data = [];
+    if (err) {
+      console.log('Ther was an error ', err);
+    } else if (statusCode === 200 && body.length) {
+        data = body.map( item => {
+          item.distance = formatDistance(item.distance);
+          return item;
+        });
+      renderHomepage(req, res, data);
+    } else if (statusCode !== 200 || !body.length) {
+      showError(req, res, statusCode);
+      console.log(statusCode);
+    }
+  });
 }
 
 const renderDetailsPage = (req, res, locDetail) => {
 	res.render('locations-info', {
 		title: locDetail.name,
-		pageHeader: {title: locDetail.name},
+		pageHeader: { title: locDetail.name },
 		sidebar: {
 			context: 'is on Loc8r because it has accessible wifi and space to sit down with your' +
 			' laptop and get some work done.',
@@ -80,7 +77,6 @@ const renderDetailsPage = (req, res, locDetail) => {
 		location: locDetail
 	});
 }
-
 
 /* Get 'locations info' page */
 const locationInfo = (req, res) => {
@@ -177,7 +173,7 @@ const formatDistance = (distance) => {
   let thisDistance = 0;
   let unit = 'm';
   if (distance > 1000) {
-    thisDistance = parseFloat(distance / 1000).toFixed(1);
+    thisDistance = parseFloat(distance / 1000).toFixed(2);
     unit = 'km';
   } else {
     thisDistance = Math.floor(distance);

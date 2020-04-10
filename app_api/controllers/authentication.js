@@ -36,11 +36,11 @@ const login = (req, res) => {
   passport.authenticate('local', (err, user, info) => {
     // let token;
     if (err) { return sendJsonResponse(res, 404, err) }
-    if (user) {
+    else if (!user) {
+      return sendJsonResponse(res, 400, info);
+    } else {
       token = user.generateJwt();
       return sendJsonResponse(res, 200, {token});
-    } else {
-      return sendJsonResponse(res, 400, info);
     }
   })(req, res);
 }

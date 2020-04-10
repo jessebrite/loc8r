@@ -44,7 +44,8 @@ const locationsListByDistance = async (req, res) => {
     });
   sendJsonResponse(res, 200, locations);
   } catch(err) {
-    console.error(err)
+    console.error(err);
+    return sendJsonResponse(res, 404, err);
   };
 };
 
@@ -105,7 +106,8 @@ const locationsUpdateOne = async (req, res) => {
   const { name, address, facilities, lng, lat, days1, opening1, closing1,
           closed1, days2, opening2, closing2, closed2 } = req.body;
   const queryText = {
-    name, address,
+    name,
+    address,
     coords: [parseFloat(lng), parseFloat(lat)],
     facilities: facilities.split(','),
     openingTimes: [{
@@ -130,8 +132,8 @@ const locationsUpdateOne = async (req, res) => {
       console.log('Update yawa!');
       return sendJsonResponse(res, 404, {message: 'Location ID not found'});
   } catch (error) {
-    console.log(error)
-    sendJsonResponse(res, 404, error)
+    console.log(error);
+    sendJsonResponse(res, 404, error);
   }
 }
 
@@ -142,7 +144,7 @@ const locationsDeleteOne = (req, res) => {
 			if (err) {
 				sendJsonResponse(res, 404, err);
 			} else {
-				sendJsonResponse(res, 202, null);
+				sendJsonResponse(res, 200, null);
 				console.log('Deletion success');
 			}
 		});

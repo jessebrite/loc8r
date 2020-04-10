@@ -1,8 +1,8 @@
 $('#addReview').submit(function (e) {
-  $('.alert.alert-default').hide();
+  $('.alert.alert-danger').hide();
   if (!$('input#name').val() || !$('select#rating').val() || !$('textarea#review').val()) {
-    if ($('.alert.alert-default').length) {
-      $('.alert.alert-default').show();
+    if ($('.alert.alert-danger').length) {
+      $('.alert.alert-danger').show();
     } else {
       $(this).prepend('<div role="alert" class="alert alert-danger">All fields required, please try again</div>');
 	}
@@ -11,4 +11,4 @@ $('#addReview').submit(function (e) {
 });
 
 
-  $('.alert.alert-default').show();
+  $('.alert.alert-danger').show();
