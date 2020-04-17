@@ -8,9 +8,7 @@ const register = async (req, res) => {
     return sendJsonResponse(res, 404, { message: 'All fields are required, please try again' });
   }
 
-  let existingUser = await User.findOne({
-      email
-  });
+  let existingUser = await User.findOne({ email });
   if (existingUser) {
     return sendJsonResponse(res, 404, { message: 'email already exists. Please choose a new one' });
   }
@@ -34,7 +32,7 @@ const login = (req, res) => {
     return sendJsonResponse(res, 404, { message: 'All fields are required, please try again' });
   }
   passport.authenticate('local', (err, user, info) => {
-    // let token;
+    let token;
     if (err) { return sendJsonResponse(res, 404, err) }
     else if (!user) {
       return sendJsonResponse(res, 400, info);
@@ -42,11 +40,15 @@ const login = (req, res) => {
       token = user.generateJwt();
       return sendJsonResponse(res, 200, {token});
     }
-  })(req, res);
+  }) (req, res);
 }
 
 // json resonse function
-const sendJsonResponse = (res, status, content) => { res.status(status).json(content); }
+const sendJsonResponse = (res, status, content) => {
+  res
+    .status(status)
+    .json(content);
+}
 
 module.exports = {
   register,

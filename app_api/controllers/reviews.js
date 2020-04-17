@@ -3,11 +3,11 @@ const Loc = mongoose.model('Location');
 const User = mongoose.model('User');
 
 // The getAuthor function retrieves the email user details
-const getAuthor = ((req, res, callback) => {
+const getAuthor = (req, res, callback) => {
   if (req.payload && req.payload.email) {
     User
       .findOne({email: req.payload.email})
-      .exec((err, user) => {
+      .exec( (err, user) => {
         if (err) {
           console.log('There was an error', err);
           sendJsonResponse(res, 404, err);
@@ -19,7 +19,7 @@ const getAuthor = ((req, res, callback) => {
   } else {
     sendJsonResponse(res, 404, {'message': 'User not found'});
   }
-});
+};
 
 // The POST method for review
 const reviewsCreate = (req, res) => {

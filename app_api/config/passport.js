@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
 // Use passport for the auth
-passport.use(new LocalStrategy({
+passport.use( new LocalStrategy({
     usernameField: 'email',
   },
   (username, password, done) => {
@@ -23,5 +23,4 @@ passport.use(new LocalStrategy({
       return done(null, user);
     });
   }
-
 ));
