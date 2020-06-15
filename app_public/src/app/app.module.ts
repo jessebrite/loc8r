@@ -39,20 +39,18 @@ import { LoginComponent } from './login/login.component';
     DetailsPageComponent,
     MostRecentFirstPipe,
     RegisterComponent,
-    LoginComponent,
-   ],
-   imports: [
-      BrowserModule,
-      HttpClientModule,
-      AppRoutingModule,
-      FormsModule,
-      ReactiveFormsModule
-   ],
-   providers: [
+    LoginComponent
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
+  ],
+  providers: [
     // {provide: APP_BASE_HREF, useValue : '/' }
-   ],
-   bootstrap: [
-      FrameworkComponent
-   ]
+  ],
+  bootstrap: [FrameworkComponent]
 })
-export class AppModule { }
+export class AppModule {}

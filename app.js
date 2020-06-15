@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const favicon = require('serve-favicon'); // Not using this feature currently
 const passport = require('passport');
-require('./app_api/models/db') // importing the DB
+require('./app_api/models/db'); // importing the DB
 require('./app_api/config/passport');
 
 // const indexRouter = require('./app_server/routes/index');
@@ -17,7 +17,7 @@ const routesAPI = require('./app_api/routes/index');
 
 const app = express();
 
-// Sets appropirate HTTP headers to help against vulnerabilites
+// Sets appropirate HTTP headers to help against HTTP vulnerabilites
 app.use(helmet());
 
 // view engine setup
@@ -37,10 +37,12 @@ app
 
 // Allowing CORS
 app.use('/api', (req, res, next) => {
-res
-  .header('Access-Control-Allow-Origin', 'http://localhost:4200')
-  .header('Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res
+    .header('Access-Control-Allow-Origin', 'http://localhost:4200')
+    .header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    );
   next();
 });
 
@@ -49,17 +51,15 @@ app
   // .use('/', indexRouter)
   .use('/users', usersRouter)
   .use('/api', routesAPI);
-  app.get('*', function(req, res, next) {
-    res.sendFile(path.join(__dirname, 'app_public', 'build', 'index.html'));
-  });
+app.get('*', function(req, res, next) {
+  res.sendFile(path.join(__dirname, 'app_public', 'build', 'index.html'));
+});
 
 // error handlers
 // // catch 'unauthorized' errors
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
-    res
-      .status(401)
-      .json({'message': `${err.name}: ${err.message}`})
+    res.status(401).json({ message: `${err.name}: ${err.message}` });
   }
 });
 
