@@ -36,23 +36,22 @@ app
   .use(passport.initialize());
 
 // Allowing CORS
-
-// app.use('/api', (req, res, next) => {
-//   const allowedOrigins = ['http://localhost:4200', 
-//         'https://boiling-stream-84042.herokuapp.com'];
-//   const origin = req.headers.origin;
-//   if (allowedOrigins.includes(origin)) {
-//        res.setHeader('Access-Control-Allow-Origin', origin);
-//   }
-//   res
-//     // .header('Access-Control-Allow-Origin', 'http://localhost:4200')
-//     .header('Access-Control-Allow-Methods', 'GET, OPTIONS')
-//     .header(
-//       'Access-Control-Allow-Headers',
-//       'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-//     );
-//   next();
-// });
+app.use('/api', (req, res, next) => {
+  const allowedOrigins = ['http://localhost:4200', 
+        'https://boiling-stream-84042.herokuapp.com'];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+       res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res
+    // .header('Access-Control-Allow-Origin', 'http://localhost:4200')
+    .header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+    .header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    );
+  next();
+});
 
 // Routes
 app
