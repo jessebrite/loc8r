@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Location, Review } from '../location';
-import { Loc8rDataService } from '../loc8r-data.service';
-import { AuthenticationService } from '../authentication.service';
+import { Loc8rDataService } from '../services/loc8r-data.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-location-details',

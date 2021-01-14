@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Loc8rDataService } from '../loc8r-data.service';
-import { GeolocationService } from '../geolocation.service';
+import { Loc8rDataService } from '../services/loc8r-data.service';
+import { GeolocationService } from '../services/geolocation.service';
 import { Location } from '../location';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';

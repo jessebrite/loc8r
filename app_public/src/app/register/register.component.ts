@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Loc8rDataService } from '../loc8r-data.service';
-import { AuthenticationService } from '../authentication.service';
+import { Loc8rDataService } from '../services/loc8r-data.service';
+import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
-import { HistoryService } from '../history.service';
+import { HistoryService } from '../services/history.service';
 
 @Component({
   selector: 'app-register',
