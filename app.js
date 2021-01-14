@@ -44,8 +44,8 @@ app.use('/api', (req, res, next) => {
   //      res.setHeader('Access-Control-Allow-Origin', origin);
   // }
   res
-    .header('Access-Control-Allow-Origin', 'http://localhost:4201')
-    .header('Access-Control-Allow-Methods', '*')
+    .header('Access-Control-Allow-Origin', '*')
+    // .header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
     .header(
       'Access-Control-Allow-Headers',
       'Origin, X-Requested-With, Content-Type, Accept, Authorization'
