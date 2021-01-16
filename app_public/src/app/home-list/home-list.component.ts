@@ -30,7 +30,7 @@ export class HomeListComponent implements OnInit {
         .then(
           foundLocations => {
             console.log(`Locations: ${foundLocations}`);
-            this.locations = foundLocations;
+            this.locations = foundLocations["locations"];
             this.message = '';
         });
   }
