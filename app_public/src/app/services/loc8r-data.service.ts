@@ -5,6 +5,7 @@ import { Location, Review } from '../location';
 import { User } from '../user';
 import { AuthResponse } from '../auth-response';
 import { BROWSER_STORAGE } from '../storage';
+import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,15 @@ export class Loc8rDataService {
     return this.http
       .get(url)
       .toPromise()
-      .then(response => response as Location[])
+      .then(response => {
+        // retrieve location array from the response object
+        // console.log(response["locations"]);
+        // return response["locations"] as Location[];
+
+        console.log(response);
+        // If all FindValueSubscriber, revert to this. It works
+        return response as Location[];
+      })
       .catch(this.handleErrors);
   }
 

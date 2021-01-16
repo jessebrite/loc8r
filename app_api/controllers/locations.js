@@ -35,9 +35,9 @@ const locationsListByDistance = async (req, res) => {
 
   try {
     // retrieving data for pagination
-    const totalCount = await Users.countDocuments();
+    const totalCount = await Loc.countDocuments();
     const pageTotal = Math.ceil(totalCount / total);
-    const users = await Users.find({}, {}, query);
+    const loc = await Loc.find({}, {}, query);
 
 
     const results = await Loc.aggregate([
@@ -58,7 +58,13 @@ const locationsListByDistance = async (req, res) => {
         distance: `${result.distance.calculated.toFixed(2)}`
       };
     });
-    sendJsonResponse(res, 200, locations);
+    // sendJsonResponse(res, 200, locations);
+     return res.status(200).json({
+      error: false,
+      locations: locations,
+      total: pageTotal,
+      pageNo: pageNo
+    });
   } catch (err) {
     console.error(err);
     return sendJsonResponse(res, 404, err);
