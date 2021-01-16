@@ -2,6 +2,15 @@ const mongoose = require('mongoose');
 const Loc = mongoose.model('Location');
 
 const locationsListByDistance = async (req, res) => {
+  // The pagination
+  const data = req.query.pageNo;
+  const pageNo = (typeof data === 'undefined' || data < 1) ? 1 : parseInt(data);
+  let query = {};
+  const total = 10;
+  query.skip = (total * pageNo) - total;
+  query.limit = total;
+
+  // coordinates
   const lng = parseFloat(req.query.lng);
   const lat = parseFloat(req.query.lat);
   const near = {
@@ -25,6 +34,12 @@ const locationsListByDistance = async (req, res) => {
   }
 
   try {
+    // retrieving data for pagination
+    const totalCount = await Users.countDocuments();
+    const pageTotal = Math.ceil(totalCount / total);
+    const users = await Users.find({}, {}, query);
+
+
     const results = await Loc.aggregate([
       {
         $geoNear: {

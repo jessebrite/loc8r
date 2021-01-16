@@ -20,6 +20,7 @@ import { DetailsPageComponent } from './details-page/details-page.component';
 import { MostRecentFirstPipe } from './pipes/most-recent-first.pipe';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 // import { APP_BASE_HREF } from '@angular/common';
 
 @NgModule({
@@ -46,7 +47,8 @@ import { LoginComponent } from './login/login.component';
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxPaginationModule
   ],
   providers: [
     // {provide: APP_BASE_HREF, useValue : '/' }
