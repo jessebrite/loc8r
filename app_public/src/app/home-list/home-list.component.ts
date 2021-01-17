@@ -18,6 +18,8 @@ export class HomeListComponent implements OnInit {
               private http: HttpClient) { }
 
   locations: Location[] = [];
+  total: number; // # of records
+  pageNo: number = 1; // # of pages
 
   public message: string;
 
@@ -31,6 +33,9 @@ export class HomeListComponent implements OnInit {
           foundLocations => {
             console.log(`Locations: ${foundLocations}`);
             this.locations = foundLocations["locations"];
+            this.total = foundLocations["total"];
+            this.pageNo = foundLocations["pageNo"];
+
             this.message = '';
         });
   }
