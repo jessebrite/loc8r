@@ -31,7 +31,7 @@ export class HomeListComponent implements OnInit {
       .getLocations(lat, lng)
         .then(
           foundLocations => {
-            console.log(`Locations: ${foundLocations}`);
+            // console.log(`Locations: ${foundLocations}`);
             this.locations = foundLocations["locations"];
             this.total = foundLocations["total"];
             this.pageNo = foundLocations["pageNo"];

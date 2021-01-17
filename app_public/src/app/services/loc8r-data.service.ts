@@ -36,12 +36,7 @@ export class Loc8rDataService {
       .get(url)
       .toPromise()
       .then(response => {
-        // retrieve location array from the response object
-        // console.log(response["locations"]);
-        // return response["locations"] as Location[];
-
-        console.log(response);
-        // If all FindValueSubscriber, revert to this. It works
+        // console.log(response); // see results
         return response as Location[];
       })
       .catch(this.handleErrors);
