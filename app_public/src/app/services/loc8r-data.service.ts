@@ -36,7 +36,7 @@ export class Loc8rDataService {
       .get(url)
       .toPromise()
       .then(response => {
-        // console.log(response); // see results
+        console.log(response); // see results
         return response as Location[];
       })
       .catch(this.handleErrors);

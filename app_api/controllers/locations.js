@@ -59,6 +59,8 @@ const locationsListByDistance = async (req, res) => {
       };
     });
     // sendJsonResponse(res, 200, locations);
+
+    // All data returned for pagination
      return res.status(200).json({
       error: false,
       locations: locations,

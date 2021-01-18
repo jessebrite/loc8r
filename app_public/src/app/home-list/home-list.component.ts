@@ -20,6 +20,7 @@ export class HomeListComponent implements OnInit {
   locations: Location[] = [];
   total: number; // # of records
   pageNo: number = 1; // # of pages
+  data: any;
 
   public message: string;
 
@@ -31,10 +32,13 @@ export class HomeListComponent implements OnInit {
       .getLocations(lat, lng)
         .then(
           foundLocations => {
-            // console.log(`Locations: ${foundLocations}`);
+            console.log(`Locations: ${foundLocations}`);
             this.locations = foundLocations["locations"];
             this.total = foundLocations["total"];
             this.pageNo = foundLocations["pageNo"];
+            this.data = foundLocations;
+
+            // this.locations = foundLocations;
 
             this.message = '';
         });

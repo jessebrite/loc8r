@@ -19,6 +19,6 @@
     </div>
   </div>
 </div>
-<div>
+<div *ngIf="data">
   <pagination-controls (pageChange)="pageNo = $event"></pagination-controls>
 </div>
