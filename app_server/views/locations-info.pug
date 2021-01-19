@@ -55,7 +55,7 @@ block content
                         small.reviewTimestamp
                           +formatDate(review.createdOn)
                       .col-12
-                        p !{(review.reviewText)}
+                        p !{(review.reviewText).replace(/\n/g, '<br/>')}
     .col-xs-12.col-md-3
       p.lead #{location.name} #{sidebar.context}
       p= sidebar.callToAction

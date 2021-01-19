@@ -4,10 +4,10 @@ const Loc = mongoose.model('Location');
 const locationsListByDistance = async (req, res) => {
   // The pagination
   const data = req.query.pageNo;
-  const pageNo = (typeof data === 'undefined' || data < 1) ? 1 : parseInt(data);
+  const pageNo = typeof data === 'undefined' || data < 1 ? 1 : parseInt(data);
   let query = {};
-  const total = 10;
-  query.skip = (total * pageNo) - total;
+  const total = 8;
+  query.skip = total * pageNo - total;
   query.limit = total;
 
   // coordinates
@@ -15,7 +15,7 @@ const locationsListByDistance = async (req, res) => {
   const lat = parseFloat(req.query.lat);
   const near = {
     type: 'Point',
-    coordinates: [lng, lat]
+    coordinates: [lng, lat],
   };
 
   const geoOptions = {
@@ -23,12 +23,12 @@ const locationsListByDistance = async (req, res) => {
     key: 'coords',
     spherical: true,
     maxDistance: 200,
-    $limit: 10
+    $limit: 10,
   };
 
   if ((!lng && lng !== 0) || (!lat && lat !== 0)) {
     sendJsonResponse(res, 404, {
-      message: 'lng and lat query parameters are required'
+      message: 'lng and lat query parameters are required',
     });
     return;
   }
@@ -37,35 +37,34 @@ const locationsListByDistance = async (req, res) => {
     // retrieving data for pagination
     const totalCount = await Loc.countDocuments();
     const pageTotal = Math.ceil(totalCount / total);
-    const loc = await Loc.find({}, {}, query);
-
+    // const loc = await Loc.find({}, {}, query);
 
     const results = await Loc.aggregate([
       {
         $geoNear: {
           near,
-          ...geoOptions
-        }
-      }
+          ...geoOptions,
+        },
+      },
     ]);
-    const locations = results.map(result => {
+    const locations = results.map((result) => {
       return {
         _id: result._id,
         name: result.name,
         address: result.address,
         rating: result.rating,
         facilities: result.facilities,
-        distance: `${result.distance.calculated.toFixed(2)}`
+        distance: `${result.distance.calculated.toFixed(2)}`,
       };
     });
     // sendJsonResponse(res, 200, locations);
 
     // All data returned for pagination
-     return res.status(200).json({
+    return res.status(200).json({
       error: false,
       locations: locations,
       total: pageTotal,
-      pageNo: pageNo
+      pageNo: pageNo,
     });
   } catch (err) {
     console.error(err);
@@ -87,7 +86,7 @@ const locationsCreate = (req, res) => {
     days2,
     opening2,
     closing2,
-    closed2
+    closed2,
   } = req.body;
   Loc.create(
     {
@@ -100,22 +99,22 @@ const locationsCreate = (req, res) => {
           days: days1,
           opening: opening1,
           closing: closing1,
-          closed: closed1
+          closed: closed1,
         },
         {
           days: days2,
           opening: opening2,
           closing: closing2,
-          closed: closed2
-        }
-      ]
+          closed: closed2,
+        },
+      ],
     },
     (err, location) => {
       if (err) {
         return sendJsonResponse(res, 404, err);
       } else if (!location) {
         return sendJsonResponse(res, 201, {
-          message: 'Error creating location'
+          message: 'Error creating location',
         });
       }
       console.log('Location creation success');
@@ -160,7 +159,7 @@ const locationsUpdateOne = async (req, res) => {
     days2,
     opening2,
     closing2,
-    closed2
+    closed2,
   } = req.body;
   const queryText = {
     name,
@@ -172,15 +171,15 @@ const locationsUpdateOne = async (req, res) => {
         days: days1,
         opening: opening1,
         closing: closing1,
-        closed: closed1
+        closed: closed1,
       },
       {
         days: days2,
         opening: opening2,
         closing: closing2,
-        closed: closed2
-      }
-    ]
+        closed: closed2,
+      },
+    ],
   };
   try {
     const locUpdate = await Loc.findByIdAndUpdate(locationid, queryText);
@@ -219,14 +218,14 @@ const sendJsonResponse = (res, status, content) => {
 
 const buildLocationList = (req, res, results) => {
   let locations = [];
-  results.forEach(doc => {
+  results.forEach((doc) => {
     locations.push({
       distance: doc.dist.calculated,
       name: doc.name,
       address: doc.address,
       rating: doc.rating,
       facilities: doc.facilities,
-      _id: doc._id
+      _id: doc._id,
     });
   });
   return locations;
@@ -238,5 +237,5 @@ module.exports = {
   locationsReadOne,
   locationsUpdateOne,
   locationsDeleteOne,
-  buildLocationList
+  buildLocationList,
 };
