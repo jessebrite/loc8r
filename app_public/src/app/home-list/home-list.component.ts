@@ -37,9 +37,6 @@ export class HomeListComponent implements OnInit {
             this.total = foundLocations["total"];
             this.pageNo = foundLocations["pageNo"];
             this.data = foundLocations;
-
-            // this.locations = foundLocations;
-
             this.message = '';
         });
   }
