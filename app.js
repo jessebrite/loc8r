@@ -36,7 +36,7 @@ app
   .use(passport.initialize());
 
 // Allowing CORS from all origins
-// Insecure, might want to change that 
+// Insecure, might want to change that
 app.use('/api', (req, res, next) => {
   res
     .header('Access-Control-Allow-Origin', '*')
