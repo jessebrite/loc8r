@@ -5,7 +5,6 @@
     <div class="card card-primary">
       <div class="card-block">
         <h2 class="card-title">Opening hours</h2>
-        <!-- Opening times to go here -->
         <p class="card-text" *ngFor="let time of location.openingTimes" [ngSwitch]="time.closed">
           {{time.days}} :
           <span *ngSwitchCase="true">Closed</span>
@@ -18,9 +17,6 @@
         <h2 class="h2 card-title">Facilities</h2>
         <span *ngFor="let facility of location.facilities" class="badge badge-warning">
          <i class="fas fa-check"></i>
-         <!-- Capitalizing each work in vanilla JS -->
-          <!-- {{ facility.charAt(0).toUpperCase()  + facility.slice(1) }} -->
-          <!-- Angular has a more succinct way using pipes -->
           {{ facility | titlecase }}
         </span>
       </div>
