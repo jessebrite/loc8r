@@ -45,10 +45,10 @@ import { NgxPaginationModule } from 'ngx-pagination';
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    AppRoutingModule
   ],
   providers: [
     // {provide: APP_BASE_HREF, useValue : '/' }
