@@ -24,9 +24,9 @@
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ getUsername() | titlecase}}
           </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-              <li><a class="dropdown-item" (click)="doLogout()">Logout</a></li>
-            </ul>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <button class="dropdown-item" (click)="doLogout()">Logout</button>
+          </div>
         </div>
       </ul>
     </div>
