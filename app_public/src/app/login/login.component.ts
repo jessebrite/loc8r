@@ -31,20 +31,19 @@ export class LoginComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private historyService: HistoryService) { }
 
-    public onLoginSubmit(): void {
-      this.formError = '';
-      if (!this.credentials.email || !this.credentials.password) {
-        this.formError = 'All fields are required, please try again';
-      } else {
-        this.doLogin();
-      }
+  public onLoginSubmit(): void {
+    if (!this.credentials.email || !this.credentials.password) {
+      this.formError = 'All fields are required, please try again';
+    } else {
+      this.doLogin();
     }
+  }
 
-    private doLogin(): void {
-      this.authenticationService.login(this.credentials)
-      .then(() => this.router.navigateByUrl(this.historyService.getLastNonLoginUrl()))
-      .catch(message => this.formError = message);
-    }
+  private doLogin(): void {
+    this.authenticationService.login(this.credentials)
+    .then(() => this.router.navigateByUrl(this.historyService.getLastNonLoginUrl()))
+    .catch(message => this.formError = message);
+  }
 
   ngOnInit() {
   }
