@@ -19,7 +19,7 @@ export class HomeListComponent implements OnInit {
 
   locations: Location[] = [];
   total: number; // # of records
-  pageNo: number = 1; // # of pages
+  pageNo = 1; // # of pages
   data: any;
 
   public message: string;

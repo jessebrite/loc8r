@@ -21,7 +21,6 @@ import { MostRecentFirstPipe } from './pipes/most-recent-first.pipe';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-// import { APP_BASE_HREF } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -50,9 +49,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     NgxPaginationModule,
     AppRoutingModule
   ],
-  providers: [
-    // {provide: APP_BASE_HREF, useValue : '/' }
-  ],
+  providers: [],
   bootstrap: [FrameworkComponent]
 })
 export class AppModule {}

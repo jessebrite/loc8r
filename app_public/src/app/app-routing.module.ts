@@ -11,8 +11,6 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
-  // { path: '', redirectTo: 'home-list', pathMatch: 'full' },
-  { path: '', component: HomepageComponent },
   { path: 'home-list', component: HomeListComponent },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
@@ -20,8 +18,8 @@ const routes: Routes = [
   { path: 'locations/:locationid', component: DetailsPageComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'page-not-found', component: PageNotFoundComponent },
-  { path: '**', redirectTo: 'page-not-found' }
+  { path: '', redirectTo: 'home-list', pathMatch: 'full'},
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({
