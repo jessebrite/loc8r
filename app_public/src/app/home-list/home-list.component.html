@@ -1,6 +1,6 @@
     <div class="error" *ngIf="message">{{message}}</div>
     <div class="card" *ngFor="let location of locations
-      | paginate: {itemsPerPage: 6, currentPage: pageNo}">
+      | paginate: {itemsPerPage: itemsPerPage, currentPage: pageNo}">
   <div class="card-block">
     <h4>
       <a routerLink="/locations/{{ location._id }}">{{location.name}}</a>

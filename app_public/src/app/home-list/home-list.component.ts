@@ -21,6 +21,7 @@ export class HomeListComponent implements OnInit {
   total: number; // # of records
   pageNo = 1; // # of pages
   data: any;
+  itemsPerPage = 6;
 
   public message: string;
 
