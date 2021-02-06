@@ -4,15 +4,14 @@ module.exports = {
     commonjs: true,
     es6: true,
     node: true,
-    promise: true
+    //promise: true,
   },
-  extends: ["eslint:recommended"],
+  extends: ['eslint:recommended'],
   globals: {
-    Atomics: "readonly",
-    SharedArrayBuffer: "readonly"
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
   },
   parserOptions: {
-    ecmaVersion: 2018
-  }
+    ecmaVersion: 2018,
+  },
 };
-
