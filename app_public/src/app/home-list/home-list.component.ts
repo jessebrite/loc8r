@@ -3,19 +3,19 @@ import { Loc8rDataService } from '../services/loc8r-data.service';
 import { GeolocationService } from '../services/geolocation.service';
 import { Location } from '../location';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home-list',
   templateUrl: './home-list.component.html',
-  styleUrls: ['./home-list.component.css']
+  styleUrls: ['./home-list.component.css'],
 })
 export class HomeListComponent implements OnInit {
   apiBaseUrl = environment.apiBaseUrl;
 
-  constructor(private loc8rDataService: Loc8rDataService,
-              private geolocationService: GeolocationService,
-              private http: HttpClient) { }
+  constructor(
+    private loc8rDataService: Loc8rDataService,
+    private geolocationService: GeolocationService
+  ) {}
 
   locations: Location[] = [];
   total: number; // # of records
@@ -29,17 +29,14 @@ export class HomeListComponent implements OnInit {
     this.message = 'Searching for nearby places';
     const lat: number = position.coords.latitude;
     const lng: number = position.coords.longitude;
-    this.loc8rDataService
-      .getLocations(lat, lng)
-        .then(
-          foundLocations => {
-            // console.log(`Locations: ${foundLocations}`);
-            this.locations = foundLocations['locations'];
-            this.total = foundLocations['total'];
-            this.pageNo = foundLocations['pageNo'];
-            this.data = foundLocations;
-            this.message = '';
-        });
+    this.loc8rDataService.getLocations(lat, lng).then((foundLocations) => {
+      // console.log(`Locations: ${foundLocations}`);
+      this.locations = foundLocations['locations'];
+      this.total = foundLocations['total'];
+      this.pageNo = foundLocations['pageNo'];
+      this.data = foundLocations;
+      this.message = '';
+    });
   }
 
   private getPosition(): void {
@@ -47,7 +44,8 @@ export class HomeListComponent implements OnInit {
     this.geolocationService.getPosition(
       this.getLocations.bind(this),
       this.showError.bind(this),
-      this.noGeo.bind(this));
+      this.noGeo.bind(this)
+    );
   }
 
   private showError(error: any): void {
@@ -61,5 +59,4 @@ export class HomeListComponent implements OnInit {
   ngOnInit() {
     this.getPosition();
   }
-
 }

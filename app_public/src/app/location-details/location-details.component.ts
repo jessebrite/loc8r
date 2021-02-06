@@ -6,16 +6,18 @@ import { AuthenticationService } from '../services/authentication.service';
 @Component({
   selector: 'app-location-details',
   templateUrl: './location-details.component.html',
-  styleUrls: ['./location-details.component.css']
+  styleUrls: ['./location-details.component.css'],
 })
 export class LocationDetailsComponent implements OnInit {
-
   @Input() location: Location;
 
-  public BINGMAPS_API_KEY = 'AoD8HJqoeVQM1GmIOeJSTgsJ7jVNsriUgXvWDXh6xbofHvj6egAI6TQc3Yv1l6Vf';
+  public BINGMAPS_API_KEY =
+    'AoD8HJqoeVQM1GmIOeJSTgsJ7jVNsriUgXvWDXh6xbofHvj6egAI6TQc3Yv1l6Vf';
 
-  constructor(private loc8rDataService: Loc8rDataService,
-              private authenticationService: AuthenticationService) { }
+  constructor(
+    private loc8rDataService: Loc8rDataService,
+    private authenticationService: AuthenticationService
+  ) {}
 
   public formVisible = false;
   public formError: string;
@@ -23,11 +25,15 @@ export class LocationDetailsComponent implements OnInit {
   public newReview: Review = {
     author: '',
     rating: 5,
-    reviewText: ''
+    reviewText: '',
   };
 
   private formIsValid(): boolean {
-    if (this.newReview.author && this.newReview.rating && this.newReview.reviewText) {
+    if (
+      this.newReview.author &&
+      this.newReview.rating &&
+      this.newReview.reviewText
+    ) {
       return true;
     }
     return false;
@@ -44,7 +50,8 @@ export class LocationDetailsComponent implements OnInit {
     this.formError = '';
     this.newReview.author = this.getUsername();
     if (this.formIsValid()) {
-      this.loc8rDataService.addReviewByLocationId(this.location._id, this.newReview)
+      this.loc8rDataService
+        .addReviewByLocationId(this.location._id, this.newReview)
         .then((review: Review) => {
           console.log('Appending current review');
           const reviews = this.location.reviews.slice(0);
@@ -62,10 +69,9 @@ export class LocationDetailsComponent implements OnInit {
   }
 
   public getUsername(): string {
-    const {name} = this.authenticationService.getCurrentUser();
+    const { name } = this.authenticationService.getCurrentUser();
     return name ? name : 'Guest';
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }

@@ -4,7 +4,6 @@ import { HomeListComponent } from './home-list/home-list.component';
 import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { HomepageComponent } from './homepage/homepage.component';
 import { DetailsPageComponent } from './details-page/details-page.component';
 import { LocationDetailsComponent } from './location-details/location-details.component';
 import { RegisterComponent } from './register/register.component';

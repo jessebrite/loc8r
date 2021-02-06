@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Loc8rDataService } from '../services/loc8r-data.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
 import { HistoryService } from '../services/history.service';
