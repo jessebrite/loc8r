@@ -2,7 +2,7 @@
 require('dotenv').config();
 const createError = require('http-errors');
 const express = require('express');
-const helmet = require('helmet');
+const helmet = require('helmet');   
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -11,7 +11,6 @@ const passport = require('passport');
 require('./app_api/models/db'); // importing the DB
 require('./app_api/config/passport');
 
-// const indexRouter = require('./app_server/routes/index');
 const usersRouter = require('./app_server/routes/users');
 const routesAPI = require('./app_api/routes/index');
 
@@ -52,7 +51,7 @@ app
   // .use('/', indexRouter)
   .use('/users', usersRouter)
   .use('/api', routesAPI);
-app.get('*', function(req, res, next) {
+app.get('*', function (req, res, next) {
   res.sendFile(path.join(__dirname, 'app_public', 'build', 'index.html'));
 });
 
