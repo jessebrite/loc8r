@@ -12,7 +12,7 @@ export class ContactComponent implements OnInit {
       title: 'Contact',
       strapline: ''
     },
-    content: 'Contact will be provided soon'
+    content: 'Contact will be provided soon. Kindly be patient'
   };
 
   constructor() { }

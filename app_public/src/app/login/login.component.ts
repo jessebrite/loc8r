@@ -6,30 +6,30 @@ import { HistoryService } from '../services/history.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-
   public formError = '';
 
   public credentials = {
     name: '',
     email: '',
-    password: ''
+    password: '',
   };
 
   public pageContent = {
     header: {
       title: 'Create a new account',
-      strapline: ''
+      strapline: '',
     },
-      sidebar: ''
+    sidebar: '',
   };
 
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
-    private historyService: HistoryService) { }
+    private historyService: HistoryService
+  ) {}
 
   public onLoginSubmit(): void {
     if (!this.credentials.email || !this.credentials.password) {
@@ -40,12 +40,13 @@ export class LoginComponent implements OnInit {
   }
 
   private doLogin(): void {
-    this.authenticationService.login(this.credentials)
-    .then(() => this.router.navigateByUrl(this.historyService.getLastNonLoginUrl()))
-    .catch(message => this.formError = message);
+    this.authenticationService
+      .login(this.credentials)
+      .then(() =>
+        this.router.navigateByUrl(this.historyService.getLastNonLoginUrl())
+      )
+      .catch((message) => (this.formError = message));
   }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

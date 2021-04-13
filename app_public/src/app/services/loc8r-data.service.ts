@@ -7,15 +7,15 @@ import { AuthResponse } from '../auth-response';
 import { BROWSER_STORAGE } from '../storage';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class Loc8rDataService {
+  private apiBaseUrl = environment.apiBaseUrl;
 
   constructor(
     private http: HttpClient,
-    @Inject(BROWSER_STORAGE) private storage: Storage) { }
-
-  private apiBaseUrl = environment.apiBaseUrl;
+    @Inject(BROWSER_STORAGE) private storage: Storage
+  ) {}
 
   private handleErrors(error: any): Promise<any> {
     return Promise.reject(error.error.message); // Message is captured in the error object
@@ -28,13 +28,13 @@ export class Loc8rDataService {
     const params: string = [
       `lng=${lng}`,
       `lat=${lat}`,
-      `maxDistance=${maxDistance}`
+      `maxDistance=${maxDistance}`,
     ].join('&');
     const url = `${this.apiBaseUrl}/locations?${params}`;
     return this.http
       .get(url)
       .toPromise()
-      .then(response => {
+      .then((response) => {
         // console.log(response);
         return response as Location[];
       })
@@ -46,28 +46,31 @@ export class Loc8rDataService {
     return this.http
       .get(url)
       .toPromise()
-      .then(response => response as Location)
+      .then((response) => response as Location)
       .catch(this.handleErrors);
   }
 
-  public addReviewByLocationId(locationid: string, formData: Review): Promise<Review> {
+  public addReviewByLocationId(
+    locationid: string,
+    formData: Review
+  ): Promise<Review> {
     const url = `${this.apiBaseUrl}/locations/${locationid}/reviews`;
     const httpOptions = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.storage.getItem('loc8r-token')}`
-      })
+        Authorization: `Bearer ${this.storage.getItem('loc8r-token')}`,
+      }),
     };
     return this.http
       .post(url, formData, httpOptions)
       .toPromise()
-      .then(response => response as Review)
+      .then((response) => response as Review)
       .catch(this.handleErrors);
   }
 
   public login(user: User): Promise<AuthResponse> {
     return this.makeAuthApiCall('login', user);
   }
-    public register(user: User): Promise<AuthResponse> {
+  public register(user: User): Promise<AuthResponse> {
     return this.makeAuthApiCall('register', user);
   }
 
@@ -76,7 +79,7 @@ export class Loc8rDataService {
     return this.http
       .post(url, user)
       .toPromise()
-      .then(response => response as AuthResponse)
+      .then((response) => response as AuthResponse)
       .catch(this.handleErrors);
   }
 }

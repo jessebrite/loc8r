@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class DistancePipe implements PipeTransform {
   transform = (distance: number) => {
-    const isNumeric = (n) => {
+    const isNumeric = (n: any) => {
       return !isNaN(parseFloat(n)) && isFinite(n);
     };
     if (distance && isNumeric(distance)) {
