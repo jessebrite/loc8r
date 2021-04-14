@@ -3,19 +3,18 @@ import { Router, NavigationEnd, RouterEvent } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HistoryService {
-
   private urls: string[] = [];
 
   constructor(private router: Router) {
     this.router.events
-    .pipe(filter(routerEvent => routerEvent instanceof NavigationEnd))
-    .subscribe((routerEvent: NavigationEnd) => {
-      const url = routerEvent.urlAfterRedirects;
-      this.urls = [...this.urls, url];
-    });
+      .pipe(filter((routerEvent) => routerEvent instanceof NavigationEnd))
+      .subscribe((routerEvent: NavigationEnd) => {
+        const url = routerEvent.urlAfterRedirects;
+        this.urls = [...this.urls, url];
+      });
   }
 
   public getPreviousUrl(): string {
@@ -25,9 +24,8 @@ export class HistoryService {
 
   public getLastNonLoginUrl(): string {
     const exclude: string[] = ['/register', '/login'];
-    const filtered = this.urls.filter(url => !exclude.includes(url));
+    const filtered = this.urls.filter((url) => !exclude.includes(url));
     const length = filtered.length;
     return length > 1 ? filtered[length - 1] : '/';
   }
-
 }

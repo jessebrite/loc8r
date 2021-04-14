@@ -6,7 +6,7 @@ import { Loc8rDataService } from './loc8r-data.service';
 describe('Service: Loc8rData', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [Loc8rDataService]
+      providers: [Loc8rDataService],
     });
   });
 

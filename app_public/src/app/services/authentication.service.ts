@@ -5,13 +5,13 @@ import { User } from '../user';
 import { AuthResponse } from '../auth-response';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthenticationService {
-
   constructor(
     @Inject(BROWSER_STORAGE) private storage: Storage,
-    private loc8rDateService: Loc8rDataService) { }
+    private loc8rDateService: Loc8rDataService
+  ) {}
 
   public getToken(): string {
     return this.storage.getItem('loc8r-token');
@@ -22,13 +22,15 @@ export class AuthenticationService {
   }
 
   public login(user: User): Promise<any> {
-    return this.loc8rDateService.login(user)
-    .then((authResponse: AuthResponse) => this.saveToken(authResponse.token));
+    return this.loc8rDateService
+      .login(user)
+      .then((authResponse: AuthResponse) => this.saveToken(authResponse.token));
   }
 
   public register(user: User): Promise<any> {
-    return this.loc8rDateService.register(user)
-    .then((authResponse: AuthResponse) => this.saveToken(authResponse.token));
+    return this.loc8rDateService
+      .register(user)
+      .then((authResponse: AuthResponse) => this.saveToken(authResponse.token));
   }
 
   public logout(): void {
@@ -39,7 +41,7 @@ export class AuthenticationService {
     const token: string = this.getToken();
     if (token) {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.exp > (Date.now() / 1000);
+      return payload.exp > Date.now() / 1000;
     } else {
       return false;
     }
